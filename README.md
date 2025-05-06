@@ -17,7 +17,7 @@
 
 ---
 
-## Features ✨
+## Features ✨ (#features)
 
 * 💡 **Vibrant UI** powered by **Bootstrap**, **Framer Motion**, and **GSAP** animations for a truly electrifying experience.
   
@@ -37,7 +37,7 @@
 
 ---
 
-## Tech Stack 🛠️
+## Tech Stack 🛠️(#tech-stack)
 
 * **React** (^18.2.0)
 * **React DOM** (^18.2.0)
@@ -56,14 +56,14 @@
 
 ---
 
-## Getting Started 🚀
+## Getting Started 🚀(#getting-started)
 
 Follow these steps to spin up Neon‑mart on your local machine:
 
 1. **Clone the repo**
 
    ```bash
-   git clone https://github.com/your-username/neon-mart.git
+   git clone git@github.com:mrrafi2/Neon-cart.git
    cd neon-mart
    ```
 
