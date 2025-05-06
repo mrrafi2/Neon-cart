@@ -17,7 +17,7 @@
 
 ---
 
-## Features ✨ (#features)
+## Features 
 
 * 💡 **Vibrant UI** powered by **Bootstrap**, **Framer Motion**, and **GSAP** animations for a truly electrifying experience.
   
@@ -37,7 +37,7 @@
 
 ---
 
-## Tech Stack 🛠️(#tech-stack)
+## Tech Stack 
 
 * **React** (^18.2.0)
 * **React DOM** (^18.2.0)
@@ -56,7 +56,7 @@
 
 ---
 
-## Getting Started 🚀(#getting-started)
+## Getting Started 
 
 Follow these steps to spin up Neon‑mart on your local machine:
 
