@@ -87,7 +87,7 @@ Follow these steps to spin up Neon‑mart on your local machine:
 
 ---
 
-## Configuration 🛠️
+## Configuration 
 
 Create a `.env.local` file in the project root and add your keys:
 
@@ -110,7 +110,7 @@ VITE_EMAILJS_PUBLIC_KEY=your_public_key
 
 ---
 
-## Running Locally 🏃‍♂️
+## Running Locally 
 
 * **Dev mode**: `npm run dev` — edits live with hot‑reload.
 * **Build**: `npm run build` — creates an optimized production bundle.
@@ -120,7 +120,7 @@ VITE_EMAILJS_PUBLIC_KEY=your_public_key
 
 ---
 
-## Deployment 📦
+## Deployment 
 
 Neon‑mart plays nice with most hosting platforms:
 
@@ -139,7 +139,7 @@ Choose your neon‑powered runway and watch it soar! 🚀
 
 ---
 
-## Contributing ❤️
+## Contributing 
 
 We’d love your spark! ✨
 
@@ -151,7 +151,7 @@ We’d love your spark! ✨
 
 ---
 
-## License 📜
+## License 
 
 Distributed under the MIT License. See `LICENSE` for more info.
 
