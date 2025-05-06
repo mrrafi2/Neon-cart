@@ -1,7 +1,3 @@
-Thought for a couple of seconds
-
-
-````markdown
 🚀 **Neon‑Mart**  
 _A cyberpunk‑themed, React‑powered e‑commerce storefront with neon glows, fluid animations, and real‑time features!_
 
@@ -26,8 +22,7 @@ _A cyberpunk‑themed, React‑powered e‑commerce storefront with neon glows, 
 
 ## 🎬 Live Demo & Screenshots
 
-> 🔗 [Live Site](https://neon-cart.vercel.app/)
-
+> Coming soon! (Or your deployed link here.)
 
 ![Home](./docs/screenshots/home.png)  
 *Neon‑glow hero section & product carousel.*
@@ -38,20 +33,14 @@ _A cyberpunk‑themed, React‑powered e‑commerce storefront with neon glows, 
 ---
 
 ## 🌟 Key Features
-- **⚡ Responsive UI** — Built with React and CSS Modules, adapts to mobile/tablet/desktop
 
-- **🔍 Live Product Search & Filters** — Instant filtering by category, price, ratings
-  
-- **🔐 Email Inquiries** — “Contact Seller” via EmailJS form integration
- 
-- **🔔 Scroll‑Aware Animations** — Items animate into view as you scroll (Intersection Observer)
-  
-- **🎨 Fluid Transitions** — Page and component transitions with Framer Motion & GSAP
- 
-- **⚡ Firebase Integration** — Real‑time product data, Firestore catalog, user wishlists
-  
-- **📦 Responsive Design** — Mobile‑first layouts powered by Bootstrap 5
-  
+- **🛍️ Shopping Cart & Checkout** — Add/remove items, quantity controls & checkout flow  
+- **🔍 Live Product Search & Filters** — Instant filtering by category, price, ratings  
+- **🔐 Email Inquiries** — “Contact Seller” via EmailJS form integration  
+- **🔔 Scroll‑Aware Animations** — Items animate into view as you scroll (Intersection Observer)  
+- **🎨 Fluid Transitions** — Page and component transitions with Framer Motion & GSAP  
+- **⚡ Firebase Integration** — Real‑time product data, Firestore catalog, user wishlists  
+- **📦 Responsive Design** — Mobile‑first layouts powered by Bootstrap 5  
 - **💡 Iconography** — Crisp vector icons via React Icons  
 
 ---
@@ -71,6 +60,21 @@ _A cyberpunk‑themed, React‑powered e‑commerce storefront with neon glows, 
 | **Icons**                   | React Icons                                     |
 
 ---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- **Node.js** v16+ and **npm** (or Yarn)  
+- **Firebase** project for Firestore & Auth  
+- **EmailJS** account for contact form  
+
+### Installation
+
+1. **Clone the repo**  
+   ```bash
+   git clone https://github.com/your‑username/neon‑mart.git
+   cd neon‑mart
 
 ## 🚀 Getting Started
 
