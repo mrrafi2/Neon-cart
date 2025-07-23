@@ -1,55 +1,519 @@
+/* Futuristic Product Grid - Pure CSS Module (No Tailwind) */
+
+.gridWrapper {
+  position: relative;
+  min-height: 400px;
+}
+
 .gridContainer {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-    gap: 20px;
-    padding: 10px;
-    justify-content: center;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+  padding: 1rem;
+  justify-items: center;
+  z-index: 10;
+}
+
+/* Responsive grid adjustments */
+@media (max-width: 1400px) {
+  .gridContainer {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .gridContainer {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.25rem;
+    padding: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .gridContainer {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    padding: 0.5rem;
+  }
+}
+
+.gridItem {
+  width: 100%;
+  max-width: 300px;
+  opacity: 0;
+  transform: translateY(30px) scale(0.9);
+  animation: gridItemEntrance 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  will-change: transform, opacity;
+}
+
+/* Empty state styling */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  text-align: center;
+  padding: 2rem;
+  grid-column: 1 / -1;
+}
+
+.emptyIcon {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin-bottom: 2rem;
+  animation: emptyIconFloat 3s ease-in-out infinite;
+}
+
+.emptyIconBorder {
+  width: 100%;
+  height: 100%;
+  border: 2px dashed rgba(0, 255, 255, 0.4);
+  border-radius: 2rem;
+  background: linear-gradient(135deg, rgba(26, 22, 37, 0.5) 0%, rgba(15, 13, 19, 0.8) 100%);
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+.emptyIconBorder::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 25% 25%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(200, 71, 255, 0.1) 0%, transparent 50%);
+  animation: backgroundPulse 4s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+.emptyIconLines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.emptyLineTop {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 24px;
+  height: 1px;
+  background: rgba(0, 255, 255, 0.5);
+}
+
+.emptyLineLeft {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 1px;
+  height: 24px;
+  background: rgba(0, 255, 255, 0.5);
+}
+
+.emptyLineBottom {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  width: 24px;
+  height: 1px;
+  background: rgba(200, 71, 255, 0.5);
+}
+
+.emptyLineRight {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  width: 1px;
+  height: 24px;
+  background: rgba(200, 71, 255, 0.5);
+}
+
+.emptyIconCenter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #00ffff, #c847ff);
+  border-radius: 50%;
+  animation: iconPulse 2s ease-in-out infinite;
+}
+
+.emptyContent {
+  text-align: center;
+}
+
+.emptyTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #e6ffff;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #00ffff, #c847ff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.emptyDescription {
+  font-size: 0.9rem;
+  color: #9ca3af;
+  max-width: 400px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Circuit background pattern */
+.circuitBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  z-index: 1;
+}
+
+.circuitGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+  grid-template-rows: repeat(auto-fit, minmax(60px, 1fr));
+  gap: 1px;
+  width: 100%;
+  height: 100%;
+}
+
+.circuitCell {
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  position: relative;
+}
+
+.circuitHighlight1 {
+  background: rgba(0, 255, 255, 0.05);
+}
+
+.circuitHighlight2 {
+  background: rgba(200, 71, 255, 0.05);
+}
+
+.circuitCell:nth-child(13n)::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 4px;
+  height: 4px;
+  background: rgba(0, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Floating particles effect */
+.floatingParticles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: rgba(0, 255, 255, 0.4);
+  border-radius: 50%;
+  animation: particleFloat 6s ease-in-out infinite;
+}
+
+.particle:nth-child(2n) {
+  background: rgba(200, 71, 255, 0.4);
+  animation-duration: 8s;
+}
+
+.particle:nth-child(3n) {
+  background: rgba(148, 71, 255, 0.4);
+  animation-duration: 7s;
+}
+
+/* Selected product modal */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(10, 10, 11, 0.8);
+  backdrop-filter: blur(15px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 1000;
+  animation: modalFadeIn 0.3s ease-out;
+}
+
+.modalContent {
+  background: linear-gradient(135deg, #1a1625 0%, #0f0d13 100%);
+  border: 1px solid rgba(0, 255, 255, 0.4);
+  border-radius: 1.5rem;
+  padding: 2rem;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 
+    0 0 50px rgba(0, 255, 255, 0.3),
+    0 20px 60px rgba(10, 10, 11, 0.8);
+  animation: modalSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.modalContent::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, 
+    transparent 30%, 
+    rgba(0, 255, 255, 0.05) 31%, 
+    rgba(0, 255, 255, 0.05) 32%, 
+    transparent 33%);
+  background-size: 30px 30px;
+  pointer-events: none;
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.modalTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #e6ffff;
+}
+
+.modalCloseButton {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(10, 10, 11, 0.8);
+  border: 1px solid rgba(0, 255, 255, 0.3);
+  color: #e6ffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  font-size: 1rem;
+}
+
+.modalCloseButton:hover {
+  background: rgba(0, 255, 255, 0.2);
+  border-color: #00ffff;
+  transform: scale(1.1);
+}
+
+.modalBody {
+  position: relative;
+  z-index: 2;
+}
+
+.modalImage {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 1rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(0, 255, 255, 0.2);
+}
+
+.modalDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.modalProductName {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #e6ffff;
+  margin: 0;
+}
+
+.modalFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modalPrice {
+  font-size: 1.25rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #ffa500, #ff0099);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.modalCartButton {
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #00ffff, #0080ff);
+  color: #0a0a0b;
+  border: none;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 255, 255, 0.3);
+}
+
+.modalCartButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(0, 255, 255, 0.4);
+}
+
+.modalCartButton:active {
+  transform: translateY(0);
+}
+
+/* Keyframe animations */
+@keyframes gridItemEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.9) rotateX(10deg);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translateY(-5px) scale(1.02) rotateX(-2deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotateX(0deg);
+  }
+}
+
+@keyframes backgroundPulse {
+  0% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0.6;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes emptyIconFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes iconPulse {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+@keyframes particleFloat {
+  0% {
+    transform: translateY(100vh) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100px) translateX(100px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .gridItem,
+  .emptyIcon,
+  .particle,
+  .modalOverlay,
+  .modalContent,
+  .modalCartButton {
+    animation: none;
+    transition: none;
   }
   
   .gridItem {
-    opacity: 0;
-    transform: translateY(20px);
-    animation: gridFadeUp 0.5s ease forwards;
+    opacity: 1;
+    transform: none;
   }
   
-  @keyframes gridFadeUp {
-    to { opacity: 1; transform: translateY(0); }
+  .modalCartButton:hover {
+    transform: none;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .emptyIconBorder {
+    border-width: 3px;
+    background: #0a0a0b;
   }
   
-  .noProducts {
-    font-size: 16px;
-    font-weight: bold;
-    color: cyan;
-    text-shadow: 0 0 5px rgba(255, 111, 97, 0.5), 0 0 10px rgba(255, 111, 97, 0.3);
-    text-align: center;
-    padding: 10px;
-    border: 2px dashed cyan;
-    border-radius: 12px;
-    background: linear-gradient(135deg, #ffffff, rgba(255, 255, 255, 0.7));
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    animation: fadeIn 1s ease-in-out;
+  .emptyTitle {
+    color: #ffffff;
   }
   
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+  .modalContent {
+    border-width: 2px;
   }
-  
-  /* Responsive Adjustments */
-  @media (max-width: 768px) {
-    .gridContainer {
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    }
-    .noProducts {
-      font-size: 14px;
-      padding: 8px;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .gridContainer {
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 16px;
-      padding: 0px;
-    }
-  }
+}

@@ -1,0 +1,447 @@
+{
+  "categories": {
+    "Electronics": [
+      "Desktop Computers",
+      "Laptops",
+      "Mobile Phones",
+      "Televisions",
+      "Cameras",
+      "Headphones",
+      "Smart Watches"
+    ],
+    "Men's Clothing": [ 
+    "T-Shirt & Shirt",
+    "Panjabi",
+    "Jubba",
+    "Pants",
+    "Lungi",
+    "Jacket",
+    "Coat",
+    "Tie",
+    "Cap"
+     ],
+    "Women's Clothing": [ 
+    "Hijab",
+    "Three Piece",
+    "Saree",
+    "Shalwar Khameez",
+    "Skirts",
+    "Burqa"
+     ],
+    "Vehicles": [ 
+        "Motorcycles", "Bicycles"
+     ],
+    "Sports": [
+    "Jersey",
+    "Football",
+    "Cricket Bats",
+    "Cricket Balls",
+    "Tennis Balls",
+    "Boots",
+    "Helmets",
+    "Racket"
+    ]
+  },
+  "dynamicFields": {
+    "Electronics": {
+      "Desktop Computers": [
+        "Model",
+        "CPU",
+        "RAM",
+        "Storage Type",
+        "Storage Capacity",
+        "GPU",
+        "Motherboard",
+        "Power Supply",
+        "Form Factor",
+        "OS"
+      ],
+      "Laptops": [
+        "Model",
+        "CPU",
+        "RAM",
+        "Storage Type",
+        "Storage Capacity",
+        "GPU",
+        "Screen Size",
+        "Resolution",
+        "Battery Life",
+        "Weight",
+        "OS"
+      ],
+      "Mobile Phones": [
+        "Model",
+        "Manufacturer",
+        "Release Year",
+        "CPU",
+        "RAM",
+        "Internal Storage",
+        "Display Size",
+        "Display Type",
+        "Resolution",
+        "Rear Camera(s)",
+        "Front Camera",
+        "Battery Capacity",
+        "OS",
+        "Connectivity (5G, NFC, etc.)"
+      ],
+      "Televisions": [
+        "Model",
+        "Screen Size",
+        "Display Type",
+        "Resolution",
+        "HDR Support",
+        "Refresh Rate",
+        "Smart TV OS",
+        "HDMI Ports",
+        "Speaker Output"
+      ],
+      "Cameras": [
+        "Brand",
+        "Model",
+        "Type (DSLR/Mirrorless/Point & Shoot)",
+        "Sensor Size",
+        "Megapixels",
+        "Lens Mount",
+        "ISO Range",
+        "Max Shutter Speed",
+        "Video Resolution",
+        "Battery Life"
+      ],
+      "Headphones": [
+        "Model",
+        "Type (Over-Ear, In-Ear)",
+        "Connection (Wired, Bluetooth)",
+        "Frequency Response",
+        "Driver Size",
+        "Noise Cancellation",
+        "Battery Life",
+        "Weight"
+      ],
+      "Smart Watches": [
+        "Model",
+        "Display Type",
+        "Display Size",
+        "Battery Life",
+        "OS",
+        "Sensors (Heart Rate, SpO2, GPS)",
+        "Connectivity",
+        "Water Resistance"
+      ]
+    },
+
+    "Men's Clothing": {
+      "T-Shirt & Shirt": [
+    "Material",
+    "Fit",
+    "Sleeve Length",
+    "Neck Type",
+    "Color",
+    "Pattern",
+    "Size Range (S–XXL)",
+    "Care Instructions",
+    "Season",
+    "Occasion",
+    "Country of Origin",
+    "Stretch (%)",
+    "Sustainability"
+  ],
+  "Panjabi": [
+    "Material",
+    "Fit",
+    "Sleeve Length",
+    "Pattern",
+    "Color",
+    "Size Range",
+    "Neck Style",
+    "Care Instructions",
+    "Occasion",
+    "Country of Origin",
+    "Lining",
+    "Weight"
+  ],
+  "Jubba": [
+    "Material",
+    "Fit",
+    "Sleeve Length",
+    "Pattern/Embroidery",
+    "Color",
+    "Length",
+    "Neck Style",
+    "Care Instructions",
+    "Occasion",
+    "Country of Origin",
+    "Lining Type",
+    "Weight"
+  ],
+  "Pants": [
+    "Material",
+    "Fit (Slim, Regular, Relaxed)",
+    "Waist Size / Inseam Length",
+    "Closure Type",
+    "Color",
+    "Pattern",
+    "Pockets",
+    "Care Instructions",
+    "Occasion",
+    "Stretch (%)",
+    "Lining",
+    "Country of Origin"
+  ],
+  "Lungi": [
+    "Material",
+    "Size",
+    "Pattern",
+    "Color",
+    "Closure Type",
+    "Care Instructions",
+    "Tradition",
+    "Occasion",
+    "Country of Origin"
+  ],
+  "Jacket": [
+    "Material",
+    "Fit",
+    "Closure Type",
+    "Lining",
+    "Color",
+    "Waterproof",
+    "Hood",
+    "Pockets",
+    "Care Instructions",
+    "Season (Fall, Winter)",
+    "Country of Origin"
+  ],
+  "Coat": [
+    "Material",
+    "Fit",
+    "Length",
+    "Closure Type",
+    "Lining Type",
+    "Color",
+    "Water Resistance",
+    "Hood",
+    "Pockets",
+    "Care Instructions",
+    "Season",
+    "Country of Origin"
+  ],
+  "Tie": [
+    "Brand",
+    "Material",
+    "Length & Width",
+    "Pattern/Color",
+    "Lining Material",
+    "Knot Style",
+    "Care Instructions",
+    "Occasion (Formal, Business)",
+    "Country of Origin"
+  ],
+  "Cap": [
+    "Material",
+    "Style",
+    "Closure",
+    "Color",
+    "Pattern",
+    "Visor Type",
+    "Size/Adjustability",
+    "Care Instructions",
+    "Season",
+    "Country of Origin"
+  ]
+    },
+
+    "Women's Clothing": {
+    "Hijab": [
+    "Material",
+    "Color",
+    "Pattern",
+    "Size",
+    "Shape",
+    "Edge Finish",
+    "Care Instructions",
+    "Occasion",
+    "Country of Origin"
+  ],
+  "Three Piece": [
+    "Material",
+    "Color",
+    "Pattern",
+    "Size Options",
+    "Dupatta Inclusion",
+    "Embroidery",
+    "Lining",
+    "Sleeve Length",
+    "Neck Design",
+    "Care Instructions",
+    "Occasion"
+  ],
+  "Saree": [
+    "Material",
+    "Color",
+    "Pattern",
+    "Length",
+    "Blouse Included",
+    "Blouse Fabric",
+    "Border Type",
+    "Embroidery",
+    "Draping Style",
+    "Care Instructions",
+    "Occasion"
+  ],
+  "Shalwar Khameez": [
+    "Material",
+    "Color",
+    "Pattern",
+    "Size Options",
+    "Kameez Length",
+    "Salwar Style",
+    "Dupatta Included",
+    "Embroidery",
+    "Neck Design",
+    "Sleeve Style",
+    "Care Instructions",
+    "Occasion"
+  ],
+  "Skirts": [
+    "Material",
+    "Color",
+    "Pattern",
+    "Length",
+    "Waistband Type",
+    "Closure",
+    "Lining",
+    "Silhouette",
+    "Care Instructions",
+    "Occasion"
+  ],
+  "Burqa": [
+    "Material",
+    "Color",
+    "Pattern",
+    "Size",
+    "Closure",
+    "Veil Type",
+    "Embroidery",
+    "Lining",
+    "Care Instructions",
+    "Country of Origin"
+  ]
+},
+
+    "Vehicles": {
+      "Motorcycles": [
+      "Engine Capacity",
+      "Fuel Type",
+      "Transmission Type",
+      "Mileage",
+      "Top Speed",
+      "Fuel Tank Capacity",
+      "Anti Lock Braking System",
+      "Brake Type",
+      "Suspension Type",
+      "Wheel Type",
+      "Kerb Weight",
+      "Seat Height",
+      "Emission Standard",
+      "Color Options",
+      "Warranty Period"
+    ],
+    "Bicycles": [
+      "Frame Material",
+      "Bicycle Type",
+      "Gear System",
+      "Brake Type",
+      "Wheel Size",
+      "Suspension",
+      "Saddle Type",
+      "Total Weight",
+      "Frame Size",
+      "Color Options",
+      "Maximum Load Capacity",
+      "Tire Type",
+      "Handlebar Type"
+    ]
+    },
+    "Sports": {
+     "Jersey": [
+      "Material",
+      "Size Options",
+      "Sleeve Type",
+      "Collar Type",
+      "Fit Type",
+      "Color Options",
+      "Team Logo Included",
+      "Gender",
+      "Care Instructions",
+      "Season"
+    ],
+    "Football": [
+      "Size",
+      "Material",
+      "Weight",
+      "Indoor Outdoor Suitability",
+      "Panel Construction",
+      "Stitching Type",
+      "Bladder Type",
+      "Color Options"
+    ],
+    "Cricket Bats": [
+      "Material",
+      "Bat Weight",
+      "Handle Type",
+      "Bat Size",
+      "Grain Count",
+      "Toe Guard Included",
+      "Bat Profile",
+      "Finish Type"
+    ],
+    "Cricket Balls": [
+      "Material",
+      "Weight",
+      "Circumference",
+      "Seam Type",
+      "Playing Surface Suitability",
+      "Color Options"
+    ],
+    "Tennis Balls": [
+      "Quantity",
+      "Pressure Type",
+      "Court Surface Suitability",
+      "Diameter",
+      "Color"
+    ],
+    "Boots": [
+      "Sport Type",
+      "Material",
+      "Size Options",
+      "Closure Type",
+      "Sole Type",
+      "Ankle Support",
+      "Weight",
+      "Waterproof"
+    ],
+    "Helmets": [
+      "Material",
+      "Size Options",
+      "Weight",
+      "Ventilation",
+      "Certification Standard",
+      "Closure Type",
+      "Padding Type",
+      "Color Options"
+    ],
+    "Racket": [
+      "Sport Type",
+      "Frame Material",
+      "Grip Size",
+      "Head Size",
+      "String Pattern",
+      "Weight",
+      "Balance Type",
+      "Tension Range",
+      "Cover Included"
+    ]
+    }
+  }
+}

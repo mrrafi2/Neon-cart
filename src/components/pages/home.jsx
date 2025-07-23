@@ -1,5 +1,4 @@
-import Category from "../category";
-import Products from "../products";
+import Products from "../productRelated/products";
 
 export default function Home () {
 
@@ -10,8 +9,6 @@ export default function Home () {
           <br />
           <hr  style={{backgroundColor:"cyan", height:'2px'}}/>
           <br />
-           <br />
-          <Category/>
         </div>
     )
 }

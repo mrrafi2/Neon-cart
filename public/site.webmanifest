@@ -1,0 +1,66 @@
+{
+  "name": "Neon‑Cart",
+  "short_name": "NeonCart",
+  "description": "Experience neon‑lit shopping with speed, style, and smooth animations. Your cosmic e-commerce destination.",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#0f0f0f",
+  "background_color": "#0f0f0f",
+  "categories": [
+    "ecommerce",
+    "shopping",
+    "retail"
+  ],
+  "icons": [
+    {
+      "src": "/web-app-manifest-48x48.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "src": "/web-app-manifest-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "/web-app-manifest-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "/web-app-manifest-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "/web-app-manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Browse Categories",
+      "short_name": "Categories",
+      "description": "Jump straight into product categories.",
+      "url": "/",
+      "icons": [{ "src": "/icons/categories-96x96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "View Cart",
+      "short_name": "Cart",
+      "description": "See items in your cart.",
+      "url": "/",
+      "icons": [{ "src": "/icons/cart-96x96.png", "sizes": "96x96" }]
+    }
+  ]
+}

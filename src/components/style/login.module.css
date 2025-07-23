@@ -1,67 +1,192 @@
 .loginContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-    padding: 20px;
-  }
-  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+  padding: 20px;
+}
+
+.loginForm {
+  position: relative;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 40px 30px;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  width: 100%;
+  max-width: 480px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.loginForm:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.7);
+}
+
+.inputGroup {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+.inputGroup input {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 10px;
+  font-size: 1rem;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.inputGroup input:focus {
+  border-color: #00d2ff;
+  box-shadow: 0 0 8px rgba(0, 210, 255, 0.5);
+}
+.inputGroup input::placeholder {
+  color: #ccc;
+}
+
+/* Eye toggle icon */
+.eyeIcon {
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #aaa;
+  transition: color 0.3s ease;
+}
+.eyeIcon:hover {
+  color: #fff;
+}
+
+/* Error alert */
+.errorAlert {
+  background: rgba(255, 0, 0, 0.15);
+  border: 1px solid rgba(255, 0, 0, 0.5);
+  color: #f88;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.25rem;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+/* Primary login button */
+.primaryButton {
+  width: 100%;
+  background: linear-gradient(45deg, #00d2ff, #3a7bd5);
+  border: none;
+  border-radius: 50px;
+  padding: 0.85rem;
+  font-weight: bold;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.primaryButton::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.3) 10%, transparent 80%);
+  transform: scale(0);
+  transition: transform 0.5s ease;
+}
+.primaryButton:hover:not(:disabled) {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 20px rgba(0, 210, 255, 0.6);
+}
+.primaryButton:hover:not(:disabled)::before {
+  transform: scale(1);
+}
+.primaryButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Divider */
+.divider {
+  text-align: center;
+  margin: 1.75rem 0;
+  position: relative;
+  font-size: 0.9rem;
+  color: #bbb;
+}
+.divider::before,
+.divider::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 40%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.25);
+}
+.divider::before {
+  left: 0;
+}
+.divider::after {
+  right: 0;
+}
+
+/* Google button */
+.googleButton {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  color: #db4437;
+  border: none;
+  border-radius: 50px;
+  padding: 0.85rem;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+.googleButton:hover:not(:disabled) {
+  background: #f5f5f5;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+.googleButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.googleButton svg {
+  margin-right: 0.5rem;
+  font-size: 1.1rem;
+}
+
+/* Switch to signup link */
+.switch {
+  margin-top: 1.2rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #ccc;
+}
+.switch a {
+  color: #00d2ff;
+  text-decoration: none;
+  font-weight: 500;
+}
+.switch a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive tweaks */
+@media (max-width: 576px) {
   .loginForm {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 15px;
-    padding: 30px;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
-    width: 100%;
-    max-width: 500px;
-    transition: transform 0.3s ease-in-out;
+    padding: 25px 20px;
   }
-  
   .eyeIcon {
-    position: absolute;
-    top: 50%;
-    right: 15px;
-    transform: translateY(-50%);
-    cursor: pointer;
-    color: #aaa;
-    transition: color 0.3s ease;
+    right: 12px;
   }
-  
-  
-  
-  .loginButton {
-    background: linear-gradient(45deg, #00d2ff, #3a7bd5);
-    border: none;
-    border-radius: 50px;
-    padding: 10px 20px;
-    font-weight: bold;
-    transition: background 0.3s ease, transform 0.2s ease-in-out;
-  
-  }
-  
-  .loginButton:hover {
-    background: linear-gradient(45deg, #3a7bd5, #00d2ff);
-  }
-  
-  .googleButton {
-    background: #fff;
-    color: #db4437;
-    border: none;
-    border-radius: 50px;
-    padding: 10px 20px;
-    font-weight: bold;
-    transition: background 0.3s ease, transform 0.2s ease-in-out, color 0.3s ease;
-  }
-  
-  .googleButton:hover {
-    background: #f1f1f1;
-  }
-  
-  @media (max-width: 576px) {
-    .loginForm {
-      padding: 20px;
-    }
-  }
-  
+}

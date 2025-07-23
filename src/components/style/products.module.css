@@ -1,75 +1,873 @@
 .productsContainer {
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 0 0px;
+  position: relative;
+  min-height: 100vh;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.categoryTrigger {
+  position: fixed;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: linear-gradient(135deg, #00ffff, #0099cc);
+  border: none;
+  border-radius: 0 12px 12px 0;
+  padding: 16px 12px 16px 8px;
+  color: #000000;
+  font-weight: 600;
+  cursor: pointer;
+  z-index: 1000;
+  box-shadow: 
+    0 8px 25px rgba(0, 255, 255, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 60px;
+  animation: categoryPulse 3s ease-in-out infinite;
+}
+
+@keyframes categoryPulse {
+  0%, 100% { 
+    transform: translateY(-50%) translateX(0);
+    box-shadow: 
+      0 8px 25px rgba(0, 255, 255, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+  50% { 
+    transform: translateY(-50%) translateX(8px);
+    box-shadow: 
+      0 12px 35px rgba(0, 255, 255, 0.5),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  }
+}
+
+.categoryTrigger:hover {
+  transform: translateY(-50%) translateX(12px);
+  box-shadow: 
+    0 12px 35px rgba(0, 255, 255, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  animation: none;
+}
+
+.triggerIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+}
+
+.categoryTrigger:hover .triggerIcon {
+  transform: scale(1.1);
+}
+
+.triggerText {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+.triggerPulse {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 255, 255, 0.3);
+  border-radius: inherit;
+  transform: translate(-50%, -50%);
+  animation: triggerPulseAnimation 2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes triggerPulseAnimation {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* Offcanvas Styles */
+.offcanvasOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1001;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(5px);
+}
+
+.offcanvasOverlay.offcanvasOpen {
+  opacity: 1;
+  visibility: visible;
+}
+
+.offcanvasContent {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 400px;
+  max-width: 85vw;
+  background: rgba(15, 15, 25, 0.95);
+  border-right: 1px solid rgba(0, 255, 255, 0.3);
+  backdrop-filter: blur(20px);
+  transform: translateX(-100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 
+    0 0 50px rgba(0, 255, 255, 0.2),
+    inset 1px 0 0 rgba(255, 255, 255, 0.1);
+}
+
+.offcanvasOpen .offcanvasContent {
+  transform: translateX(0);
+}
+
+.offcanvasHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px;
+  border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+  background: linear-gradient(90deg, rgba(0, 255, 255, 0.1), rgba(255, 0, 255, 0.1));
+}
+
+.offcanvasTitle {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  color: #ffffff;
+  text-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+}
+
+.offcanvasClose {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.offcanvasClose:hover {
+  color: #ff0066;
+  background: rgba(255, 0, 102, 0.1);
+  transform: scale(1.1);
+}
+
+.offcanvasBody {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 255, 255, 0.3) transparent;
+}
+
+.offcanvasBody::-webkit-scrollbar {
+  width: 6px;
+}
+
+.offcanvasBody::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.offcanvasBody::-webkit-scrollbar-thumb {
+  background: rgba(0, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.offcanvasBody::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 255, 255, 0.5);
+}
+
+
+.mainContent {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+  position: relative;
+  margin-top: 4rem;
+}
+
+.title {
+  font-size: clamp(1.2rem, 3.7vw, 2.7rem);
+  font-weight: 800;
+  background: linear-gradient(135deg, #00ffff, #0080ff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 1rem;
+  position: relative;
+  display: inline-block;
+}
+
+.title::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #00ffff, #0080ff, transparent);
+  animation: titleUnderline 2s ease-in-out infinite alternate;
+}
+
+.headerStats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  font-size: 0.875rem;
+  color: #9ca3af;
+  margin-top: 1rem;
+}
+
+.statsDivider {
+  width: 1px;
+  height: 1rem;
+  background: rgba(0, 255, 255, 0.3);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+  position: relative;
+}
+
+.title {
+  font-size: clamp(1.2rem, 3.7vw, 2.7rem);
+  font-weight: 800;
+  background: linear-gradient(135deg, hsl(180, 100%, 50%), hsl(200, 100%, 60%));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 1rem;
+  position: relative;
+  display: inline-block;
+}
+
+.title::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 2px;
+  background: linear-gradient(90deg, 
+    transparent, 
+    hsl(180, 100%, 50%), 
+    hsl(200, 100%, 60%), 
+    transparent);
+  animation: titleUnderline 2s ease-in-out infinite alternate;
+}
+
+.headerStats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  font-size: 0.875rem;
+  color: hsl(180, 5%, 64.9%);
+  margin-top: 1rem;
+}
+
+.statsDivider {
+  width: 1px;
+  height: 1rem;
+  background: hsl(180, 100%, 50%, 0.3);
+}
+
+.tabContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+  padding: 0 1rem;
+}
+
+.tabButton {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: hsl(240, 10%, 3.9%, 0.8);
+  border: 1px solid hsl(180, 100%, 50%, 0.3);
+  border-radius: 2rem;
+  color: hsl(180, 100%, 90%);
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+  min-width: 120px;
+  justify-content: center;
+  overflow: hidden;
+  will-change: transform, box-shadow;
+}
+
+.tabButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    hsl(180, 100%, 50%, 0.1), 
+    transparent);
+  transition: left 0.6s ease;
+}
+
+.tabButton:hover::before {
+  left: 100%;
+}
+
+.tabButton:hover {
+  transform: translateY(-2px) scale(1.05);
+  border-color: hsl(180, 100%, 50%, 0.6);
+  box-shadow: 
+    0 8px 25px hsl(180, 100%, 50%, 0.3),
+    0 0 20px hsl(180, 100%, 50%, 0.2);
+}
+
+.tabButton:active {
+  transform: translateY(0) scale(1.02);
+  transition-duration: 0.1s;
+}
+
+.tabButton.active {
+  background: linear-gradient(135deg, hsl(180, 100%, 50%), hsl(200, 100%, 60%));
+  color: hsl(240, 10%, 3.9%);
+  border-color: hsl(180, 100%, 50%);
+  box-shadow: 
+    0 0 30px hsl(180, 100%, 50%, 0.4),
+    0 8px 25px hsl(180, 100%, 50%, 0.3);
+}
+
+.tabButton.active:hover {
+  box-shadow: 
+    0 0 40px hsl(180, 100%, 50%, 0.5),
+    0 12px 35px hsl(180, 100%, 50%, 0.4);
+}
+
+/* Circuit decorations on tabs */
+.tabButton .circuitCorner {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-style: solid;
+  border-width: 1px 0 0 1px;
+  border-color: hsl(180, 100%, 50%, 0.4);
+}
+
+.tabButton .circuitCorner.topLeft {
+  top: -1px;
+  left: -1px;
+  border-radius: 0 0 0 4px;
+}
+
+.tabButton .circuitCorner.bottomRight {
+  bottom: -1px;
+  right: -1px;
+  border-width: 0 1px 1px 0;
+  border-color: hsl(315, 100%, 60%, 0.4);
+  border-radius: 4px 0 0 0;
+}
+
+.tabBadge {
+  padding: 0.25rem 0.5rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  transition: all 0.3s ease;
+}
+
+.tabButton .tabBadge {
+  background: hsl(180, 100%, 50%, 0.2);
+  color: hsl(180, 100%, 50%);
+}
+
+.tabButton.active .tabBadge {
+  background: hsl(240, 10%, 3.9%, 0.3);
+  color: hsl(240, 10%, 3.9%);
+}
+
+/* Loading and empty states */
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  text-align: center;
+  gap: 2rem;
+}
+
+.loadingSpinner {
+  width: 60px;
+  height: 60px;
+  border: 3px solid hsl(180, 100%, 50%, 0.2);
+  border-top: 3px solid hsl(180, 100%, 50%);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loadingText {
+  color: hsl(180, 5%, 64.9%);
+  font-size: 1.125rem;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  text-align: center;
+  gap: 2rem;
+  padding: 3rem;
+}
+
+.emptyStateIcon {
+  width: 120px;
+  height: 120px;
+  border: 2px dashed hsl(180, 100%, 50%, 0.4);
+  border-radius: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  animation: emptyIconFloat 3s ease-in-out infinite;
+}
+
+.emptyStateIcon::before {
+  content: '';
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, hsl(285, 100%, 60%), hsl(315, 100%, 60%));
+  border-radius: 50%;
+  animation: emptyIconPulse 2s ease-in-out infinite;
+}
+
+.emptyStateTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, hsl(180, 100%, 50%), hsl(285, 100%, 60%));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.emptyStateDescription {
+  color: hsl(180, 5%, 64.9%);
+  max-width: 400px;
+  line-height: 1.6;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 4rem;
+  padding: 0 1rem;
+  flex-wrap: wrap;
+}
+
+.paginationButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: hsl(240, 10%, 3.9%, 0.8);
+  border: 1px solid hsl(180, 100%, 50%, 0.3);
+  border-radius: 0.75rem;
+  color: hsl(180, 100%, 90%);
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+.paginationButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.paginationButton:not(:disabled):hover {
+  background: hsl(180, 100%, 50%, 0.1);
+  border-color: hsl(180, 100%, 50%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px hsl(180, 100%, 50%, 0.2);
+}
+
+.pageNumberButton {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 0.75rem;
+  justify-content: center;
+  font-weight: 600;
+  position: relative;
+}
+
+.pageNumberButton.active {
+  background: linear-gradient(135deg, hsl(180, 100%, 50%), hsl(200, 100%, 60%));
+  color: hsl(240, 10%, 3.9%);
+  border-color: hsl(180, 100%, 50%);
+  box-shadow: 0 0 20px hsl(180, 100%, 50%, 0.4);
+}
+
+.pageNumberButton.active::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 6px;
+  height: 6px;
+  background: hsl(240, 10%, 3.9%, 0.3);
+  border-radius: 1px;
+}
+
+.pageNumber {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 0rem;
+  flex-wrap: wrap;
+}
+
+.pageButton {
+  background-color: transparent;
+  border: 2px solid #00f7ff;
+  color: #00f7ff;
+  padding: 0.5rem 0.7rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 5px #00f7ff66;
+  text-shadow: 0 0 3px #00f7ff;
+}
+
+.pageButton:hover {
+  background-color: #00f7ff20;
+  box-shadow: 0 0 12px #00f7ffe7;
+}
+
+.pageActive {
+  background-color: #02dfe7;
+  color: #000;
+  border-color: #00f7ff;
+  box-shadow: 0 0 20px #00f7ff90;
+  z-index: 2;
+}
+
+.pageActiveCorner {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 12px;
+  height: 12px;
+  background-color: #00f7ff8f;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #00f7ff;
+  animation: pulse 1.4s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.9);
+    opacity: 0.7;
+  }
+}
+
+/* Background decorative elements */
+.backgroundOrbs {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.backgroundOrb {
+  position: absolute;
+  border-radius: 50%;
+  background: linear-gradient(135deg, 
+    hsl(180, 100%, 50%, 0.1), 
+    hsl(315, 100%, 60%, 0.1));
+  animation: orbFloat 8s ease-in-out infinite;
+  filter: blur(1px);
+}
+
+.backgroundOrb:nth-child(1) {
+  width: 200px;
+  height: 200px;
+  top: 10%;
+  left: 20%;
+  animation-delay: 0s;
+  animation-duration: 10s;
+}
+
+.backgroundOrb:nth-child(2) {
+  width: 150px;
+  height: 150px;
+  top: 60%;
+  right: 20%;
+  animation-delay: 2s;
+  animation-duration: 12s;
+}
+
+.backgroundOrb:nth-child(3) {
+  width: 100px;
+  height: 100px;
+  bottom: 20%;
+  left: 50%;
+  animation-delay: 4s;
+  animation-duration: 8s;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .productsContainer {
+    padding: 1rem 0.5rem;
+  }
+
+  .categoryTrigger {
+    padding: 12px 8px 12px 4px;
+    min-width: 45px;
+  }
+  
+  .triggerText {
+    font-size: 8px;
+  }
+  
+  .offcanvasContent {
+    width: 300px;
+  }
+  
+  .offcanvasHeader {
+    padding: 20px;
+  }
+  
+  .offcanvasTitle {
+    font-size: 20px;
+  }
+  
+  
+  .header {
+    margin-bottom: 2rem;
   }
   
   .tabContainer {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 30px;
-    justify-content: center;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
   }
   
   .tabButton {
-    padding: 5px 10px;
-    border: 2px solid #00ffff;
-    border-radius: 4px;
-    background: transparent;
-    color: #00ffff;
-    cursor: pointer;
-    transition: background 0.3s ease, color 0.3s ease;
-    font-size: 12px;
+    min-width: 100px;
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
   }
   
-  .tabButton:hover {
-    background: #00ffff;
-    color: #000;
+  .headerStats {
+    flex-direction: column;
+    gap: 0.5rem;
   }
   
-  .active {
-    background: #00ffff;
-    color: #000;
-  }
-  
-  .noResults {
-    text-align: center;
-    color: #ccc;
-    font-size: 18px;
-    margin-top: 20px;
+  .statsDivider {
+    display: none;
   }
   
   .pagination {
-    display: flex;
-    justify-content: center;
+    gap: 0.25rem;
+    margin-top: 3rem;
+  }
+  
+  .paginationButton {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+  
+  .pageNumberButton {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+@media (max-width: 480px) {
+  .productsContainer {
+    padding: 0.5rem 0.25rem;
+  }
+
+  
+  
+  .tabContainer {
+    flex-direction: column;
     align-items: center;
-    gap: 6px;
-    margin-top: 30px;
   }
   
-  .pagination button {
-    padding: 5px 10px;
-    border: 2px solid #00ffff;
-    border-radius: 4px;
-    background: transparent;
-    color: #00ffff;
-    cursor: pointer;
-    transition: background 0.3s ease, color 0.3s ease;
-    font-size: 12px;
+  .tabButton {
+    width: 100%;
+    max-width: 200px;
   }
   
-  .pagination button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+  .pagination {
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+  }
+  .header{
+    margin-top: 1rem;
+  }
+}
+
+
+
+/* Keyframe animations */
+@keyframes titleUnderline {
+  0% {
+    width: 40%;
+    opacity: 0.6;
+  }
+  100% {
+    width: 80%;
+    opacity: 1;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes emptyIconFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(5deg);
+  }
+}
+
+@keyframes emptyIconPulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+@keyframes orbFloat {
+  0%, 100% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-20px) translateX(10px) rotate(90deg);
+  }
+  50% {
+    transform: translateY(-10px) translateX(-10px) rotate(180deg);
+  }
+  75% {
+    transform: translateY(-30px) translateX(5px) rotate(270deg);
+  }
+}
+
+.tabButton:focus-visible,
+.paginationButton:focus-visible {
+  outline: none;
+  box-shadow: 
+    0 0 0 2px hsl(180, 100%, 50%, 0.5),
+    0 0 20px hsl(180, 100%, 50%, 0.3);
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .title {
+    color: hsl(180, 100%, 95%);
   }
   
-  .pagination button:hover:not(:disabled) {
-    background: #00ffff;
-    color: #000;
+  .tabButton {
+    border-width: 2px;
   }
   
-  .activePage {
-    background: #00ffff;
-    color: #000;
+  .tabButton.active {
+    border-width: 3px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .title::after,
+  .loadingSpinner,
+  .emptyStateIcon,
+  .backgroundOrb,
+  .tabButton::before {
+    animation: none;
   }
   
+  .tabButton:hover,
+  .paginationButton:hover {
+    transform: none;
+  }
+  
+  .title::after {
+    width: 60%;
+    opacity: 1;
+  }
+}

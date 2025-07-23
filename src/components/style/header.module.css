@@ -1,83 +1,389 @@
+/* Header Container */
 .headerContainer {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    background: linear-gradient(135deg, #141e30, #243b55); 
-    color: #fff;
-    overflow: auto;
-    padding: 10px 20px;
-    border-bottom: 1px solid cyan;
-    animation: headerGlow 3s ease-in-out infinite;
-    overflow: hidden;
-
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: linear-gradient(135deg, rgba(10, 10, 11, 0.95), rgba(30, 30, 40, 0.95));
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+  transition: all 0.3s ease;
+  transform: translateY(0);
+  opacity: 1;
+  min-height: 80px;
+  overflow: hidden;
 }
 
- 
-@keyframes headerGlow {
-    0% {
-      border-bottom-color: #00d4ff;
-      box-shadow: 0 4px 12px rgba(0, 212, 255, 0.4);
-    }
-    25% {
-        border-bottom-color: #003cff;
-      box-shadow: 0 4px 12px rgba(0, 38, 255, 0.4);
+.headerContainer.scrolled {
+  min-height: 70px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3), 0 0 20px rgba(0, 255, 255, 0.1);
+  border-bottom-color: rgba(0, 255, 255, 0.3);
+}
 
-    }
-    
-    50% {
-      border-bottom-color: #9147ff;
-      box-shadow: 0 4px 12px rgba(145, 71, 255, 0.8);
-    }
-    100% {
-      border-bottom-color: #00d4ff;
-      box-shadow: 0 4px 12px rgba(0, 212, 255, 0.4);
-    }
-  }
+.headerContainer.hidden {
+  transform: translateY(-100%);
+  opacity: 0;
+}
 
+.headerContainer.visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Header Background Effects */
+.headerBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.circuitPattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
+  animation: circuitMove 20s linear infinite;
+  opacity: 0.3;
+}
+
+.glowEffect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(ellipse at 20% 50%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 50%, rgba(255, 0, 153, 0.1) 0%, transparent 50%);
+  animation: glowPulse 4s ease-in-out infinite;
+}
+
+/* Floating Particles */
+.particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: #00ffff;
+  border-radius: 50%;
+  box-shadow: 0 0 4px #00ffff;
+  opacity: 0.6;
+}
+
+.particle:nth-child(1) {
+  top: 20%;
+  left: 10%;
+  animation: float1 6s ease-in-out infinite;
+}
+
+.particle:nth-child(2) {
+  top: 60%;
+  left: 30%;
+  animation: float2 8s ease-in-out infinite 1s;
+}
+
+.particle:nth-child(3) {
+  top: 40%;
+  left: 70%;
+  animation: float3 7s ease-in-out infinite 2s;
+}
+
+.particle:nth-child(4) {
+  top: 80%;
+  left: 50%;
+  animation: float4 5s ease-in-out infinite 3s;
+}
+
+.particle:nth-child(5) {
+  top: 30%;
+  left: 90%;
+  animation: float5 9s ease-in-out infinite 4s;
+}
+
+/* Header Content */
+.headerContent {
+  position: relative;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0.75rem 1rem;
+  z-index: 10;
+}
+
+/* Top Row */
 .topRow {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 0.75rem;
 }
 
 .logoContainer {
-    flex: 1;
+  flex-shrink: 0;
 }
 
 .topSection {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    flex: 1;
-    font-size: 14px;
-    font-weight: bold;
-    color: #fff;
-    animation: fadeInTop 1s ease-in-out;
+  flex: 1;
+  display: flex;
+  justify-content: center;
 }
 
-/* Search Container */
+.cartContainer {
+  flex-shrink: 0;
+}
+
+/* Search Row */
+.searchRow {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
 .searchContainer {
-    position: relative;
-    top: -8px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  width: 100%;
+  max-width: 600px;
+  position: relative;
+}
+
+/* Animations */
+@keyframes circuitMove {
+  0% {
+    transform: translateX(0) translateY(0);
+  }
+  25% {
+    transform: translateX(-10px) translateY(-5px);
+  }
+  50% {
+    transform: translateX(-20px) translateY(-10px);
+  }
+  75% {
+    transform: translateX(-10px) translateY(-5px);
+  }
+  100% {
+    transform: translateX(0) translateY(0);
+  }
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes float1 {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px);
+  }
+  33% {
+    transform: translateY(-10px) translateX(5px);
+  }
+  66% {
+    transform: translateY(5px) translateX(-5px);
+  }
+}
+
+@keyframes float2 {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px);
+  }
+  50% {
+    transform: translateY(-15px) translateX(10px);
+  }
+}
+
+@keyframes float3 {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px);
+  }
+  25% {
+    transform: translateY(-8px) translateX(-8px);
+  }
+  75% {
+    transform: translateY(8px) translateX(8px);
+  }
+}
+
+@keyframes float4 {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px);
+  }
+  50% {
+    transform: translateY(-12px) translateX(-6px);
+  }
+}
+
+@keyframes float5 {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px);
+  }
+  33% {
+    transform: translateY(6px) translateX(-10px);
+  }
+  66% {
+    transform: translateY(-6px) translateX(10px);
+  }
 }
 
 /* Responsive Design */
+@media (max-width: 1024px) {
+  .headerContent {
+    padding: 0.75rem 0.75rem;
+  }
+  
+  .topRow {
+    gap: 1.5rem;
+  }
+}
+
 @media (max-width: 768px) {
-    .topRow {
-        flex-direction: row; 
-    }
+  .headerContainer {
+    min-height: 70px;
+  }
+  
+  .headerContainer.scrolled {
+    min-height: 60px;
+  }
+  
+  .headerContent {
+    padding: 0.5rem;
+  }
+  
+  .topRow {
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .searchContainer {
+    max-width: 100%;
+  }
+  
+  /* Hide some particles on mobile for performance */
+  .particle:nth-child(4),
+  .particle:nth-child(5) {
+    display: none;
+  }
+}
 
-    .topSection {
-        font-size: 12px;
-    }
+@media (max-width: 480px) {
+  .headerContainer {
+    min-height: 65px;
+  }
+  
+  .headerContainer.scrolled {
+    min-height: 55px;
+  }
+  
+  .topRow {
+    gap: 0.5rem;
+    flex-wrap: nowrap;
+  }
+  
+  .topSection {
+    flex: 0 1 auto;
+    min-width: 0;
+  }
+  
+  /* Further reduce particles on small screens */
+  .particle:nth-child(3),
+  .particle:nth-child(4),
+  .particle:nth-child(5) {
+    display: none;
+  }
+  
+  .circuitPattern {
+    background-size: 15px 15px;
+  }
+}
 
-    .searchContainer {
-    position: relative;
-    top: -10px;
-    }
+/* Extra small screens */
+@media (max-width: 320px) {
+  .headerContent {
+    padding: 0.25rem;
+  }
+  
+  .topRow {
+    gap: 0.25rem;
+  }
+}
+
+/* Performance optimizations for mobile */
+@media (max-width: 768px) {
+  .circuitPattern,
+  .glowEffect {
+    animation-duration: 40s; /* Slower animations on mobile */
+  }
+  
+  .particle {
+    animation-duration: 12s; /* Slower particle animations */
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .headerContainer {
+    transition: none;
+  }
+  
+  .circuitPattern,
+  .glowEffect,
+  .particle {
+    animation: none;
+  }
+  
+  .headerContainer.hidden {
+    display: none;
+  }
+}
+
+/* Focus states for accessibility */
+.headerContainer:focus-within {
+  box-shadow: 0 0 0 2px rgba(0, 255, 255, 0.5);
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .headerContainer {
+    background: rgba(0, 0, 0, 0.95);
+    border-bottom: 2px solid #00ffff;
+  }
+  
+  .circuitPattern,
+  .glowEffect {
+    opacity: 0.1;
+  }
+}
+
+/* Print styles */
+@media print {
+  .headerContainer {
+    position: static;
+    background: white;
+    color: black;
+    box-shadow: none;
+    border-bottom: 1px solid black;
+  }
+  
+  .headerBackground {
+    display: none;
+  }
 }

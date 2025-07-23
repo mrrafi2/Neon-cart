@@ -1,172 +1,579 @@
+
 .card {
-    position: relative;
-    width: 170px;
-    background: linear-gradient(135deg, #1f1c2c, #928dab);
-    border-radius: 15px;
-    border: 2px solid rgba(0, 255, 255, 0.5);
-    box-shadow: 0 8px 30px rgba(0, 255, 255, 0.4), inset 0 4px 10px rgba(0, 0, 0, 0.5);
-    transform-style: preserve-3d;
-    overflow: visible;
+  position: relative;
+  width: 100%;
+  max-width: 280px;
+  height: 400px;
+  background: linear-gradient(135deg, #1a1625 0%, #0f0d13 50%, #1a1625 100%);
+  border: 1px solid rgba(0, 255, 255, 0.3);
+  border-radius: 1rem;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  will-change: transform, box-shadow;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     opacity: 0;
-    transform: translateY(20px);
-    transition: transform 0.4s ease, opacity 0.4s ease, box-shadow 0.2s ease;
-    cursor: pointer;
-    
+  transform: translateY(30px) scale(0.95);
+}
+
+.card.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  animation: cardEntrance 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.card:hover {
+  transform: translateY(-8px) rotateX(2deg) rotateY(2deg) scale(1.02);
+  border-color: rgba(0, 255, 255, 0.6);
+  box-shadow: 
+    0 0 30px rgba(0, 255, 255, 0.4),
+    0 8px 40px rgba(0, 255, 255, 0.2),
+    inset 0 1px 0 rgba(0, 255, 255, 0.1);
+}
+
+.card:active {
+  transform: translateY(-4px) scale(0.98);
+  transition-duration: 0.1s;
+}
+
+.card:focus-visible {
+  outline: none;
+  border-color: #00ffff;
+  box-shadow: 
+    0 0 0 2px rgba(0, 255, 255, 0.5),
+    0 0 30px rgba(0, 255, 255, 0.3);
+}
+
+.circuitLines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+.circuitLineTop {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 64px;
+  height: 1px;
+  background: linear-gradient(to right, #00ffff, transparent);
+}
+
+.circuitLineLeft {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 1px;
+  height: 64px;
+  background: linear-gradient(to bottom, #00ffff, transparent);
+}
+
+.circuitLineBottom {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  width: 64px;
+  height: 1px;
+  background: linear-gradient(to left, #c847ff, transparent);
+}
+
+.circuitLineRight {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  width: 1px;
+  height: 64px;
+  background: linear-gradient(to top, #c847ff, transparent);
+}
+
+.glowOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.1) 0%, transparent 50%, rgba(315, 100%, 60%, 0.1) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.glowActive {
+  opacity: 1;
+}
+
+.imageContainer {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+}
+
+.productImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.card:hover .productImage {
+  transform: scale(1.1) rotate(1deg);
+}
+
+.discountBadge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 4px 8px;
+  background: linear-gradient(135deg, #c847ff, #ff0099);
+  border-radius: 9999px;
+  z-index: 10;
+}
+
+.discountText {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #0a0a0b;
+}
+
+.actionButtons {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  gap: 6px;
+  opacity: 0;
+  transform: translateX(16px);
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.actionsVisible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.infoButton,
+.cartButton {
+  width: 32px;
+  height: 32px;
+  background: rgba(10, 10, 11, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 255, 255, 0.3);
+  border-radius: 50%;
+  color: #00ffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.infoButton:hover {
+  background: rgba(0, 255, 255, 0.2);
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+}
+
+.cartButton {
+  border-color: rgba(255, 0, 153, 0.3);
+  color: #ff0099;
+  width: 40px;
+  height: 40px;
+position: relative;
+top: -5px;
+font-size: 1.3rem;
+}
+
+.cartButton:hover {
+  background: rgba(255, 0, 153, 0.2);
+  transform: scale(1.1) rotate(12deg);
+  box-shadow: 0 0 15px rgba(255, 0, 153, 0.4);
+}
+
+.infoButton:active,
+.cartButton:active {
+  transform: scale(0.95);
+}
+
+.shimmer {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.2), transparent);
+  transition: left 0.8s ease;
+  pointer-events: none;
+}
+
+.shimmerActive {
+  left: 100%;
+}
+
+.cardContent {
+  position: relative;
+  padding: 1rem;
+  height: 200px;
+  background: linear-gradient(135deg, rgba(10, 10, 11, 0.95) 0%, rgba(26, 22, 37, 0.9) 100%);
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.4s ease;
+}
+
+.card.expanded .cardContent {
+  height: 200px;
+  padding-bottom: 80px;
+}
+
+.productInfo {
+  margin-bottom: 12px;
+}
+
+.productName {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #e6ffff;
+  line-height: 1.3;
+  margin-bottom: 8px;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeInUp 0.4s ease 0.2s forwards;
+  transition: color 0.3s ease;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card:hover .productName {
+  color: #00ffff;
+}
+
+.productType {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeInUp 0.4s ease 0.3s forwards;
+}
+
+.typeValue {
+  color: rgba(0, 255, 255, 0.8);
+}
+
+.ratingContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeInUp 0.4s ease 0.4s forwards;
+  position: relative;
+  top: -17px;
+}
+
+.starsContainer {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.starFilled {
+  color: #ffa500;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+}
+
+.starEmpty {
+  color: rgba(156, 163, 175, 0.3);
+}
+
+.ratingText {
+  font-size: 0.75rem;
+  color: #e6ffff;
+  font-weight: 500;
+}
+
+.reviewCount {
+  font-size: 0.75rem;
+  color: rgba(156, 163, 175, 0.6);
+}
+
+.priceContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeInUp 0.4s ease 0.5s forwards;
+  position: relative;
+  top: -15px;
+}
+
+.priceInfo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.currentPrice {
+  font-size: 1.1rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #ffa500, #ff0099);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.originalPrice {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  text-decoration: line-through;
+}
+
+.buyButton {
+  padding: 6px 12px;
+  background: linear-gradient(135deg, #00ffff, #0080ff);
+  color: #0a0a0b;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 255, 255, 0.3);
+}
+
+.buyButton:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 25px rgba(0, 255, 255, 0.4);
+}
+
+.buyButton:active {
+  transform: scale(0.95);
+}
+
+.buyButton:focus-visible {
+  outline: none;
+  box-shadow: 
+    0 0 0 2px rgba(0, 255, 255, 0.5),
+    0 6px 25px rgba(0, 255, 255, 0.4);
+}
+
+.expandedContent {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(10, 10, 11, 0.95);
+  backdrop-filter: blur(15px);
+  border-top: 1px solid rgba(0, 255, 255, 0.2);
+  padding: 1rem;
+  transform: translateY(100%);
+  opacity: 0;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.expandedVisible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.expandedDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.expandedText {
+  font-size: 0.75rem;
+  color: #c3c7cd;
+  margin: 0;
+}
+
+.productTags {
+  display: flex;
+  gap: 8px;
+}
+
+.tag {
+  padding: 4px 8px;
+  background: rgba(0, 255, 255, 0.1);
+  color: #00ffff;
+  border-radius: 4px;
+  font-size: 0.75rem;
+}
+
+.saleTag {
+  padding: 4px 8px;
+  background: rgba(255, 0, 153, 0.1);
+  color: #ff0099;
+  border-radius: 4px;
+  font-size: 0.75rem;
+}
+
+/* Hexagonal accents */
+.accentTopLeft {
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  width: 16px;
+  height: 16px;
+  background: rgba(0, 255, 255, 0.3);
+  transform: rotate(45deg);
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+.accentBottomRight {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 16px;
+  height: 16px;
+  background: rgba(255, 0, 153, 0.3);
+  transform: rotate(45deg);
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+/* Keyframe animations */
+@keyframes cardEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95) rotateX(10deg);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translateY(-5px) scale(1.02) rotateX(-2deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotateX(0deg);
+  }
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .card {
+    max-width:260px;
+    height: 360px;
+  }
+  
+  .imageContainer {
+    height: 160px;
+  }
+  
+  .cardContent {
+    height: 200px;
+    padding: 0.75rem;
+  }
+  
+  .productName {
+    font-size: 0.85rem;
+  }
+  
+  .currentPrice {
+    font-size: 1rem;
+  }
+  
+  .card:hover {
+    transform: translateY(-4px) scale(1.01);
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    max-width: 280px;
+    height: 310px;
+  }
+  
+  .imageContainer {
+    height: 150px;
+  }
+  
+  .cardContent {
+    height: 100px;
+    padding: 0.5rem;
+  }
+  
+  .productName {
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+  }
+  
+  .productType {
+    font-size: 0.7rem;
+    margin-bottom: 8px;
+  }
+  
+  .currentPrice {
+    font-size: 0.9rem;
+  }
+  
+  .ratingContainer {
+    gap: 4px;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .actionButtons {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .productImage,
+  .actionButtons,
+  .cardContent,
+  .buyButton {
+    transition: none;
+    animation: none;
   }
   
   .card.visible {
     opacity: 1;
-    transform: translateY(0);
-  }
-  
-  .card:hover {
-    transform: translateY(-10px) rotateX(5deg) rotateY(5deg);
-    box-shadow: 0 12px 40px rgba(0, 255, 255, 0.5), inset 0 6px 15px rgba(0, 0, 0, 0.5);
-  }
-  
-  .card:active {
-    transform: scale(0.98);
-    box-shadow: 0 4px 20px rgba(0, 255, 255, 0.7);
-  }
-  
-  .imageContainer {
-    position: relative;
-    width: 100%;
-    overflow: visible;
-    border-bottom: 2px solid rgba(0, 255, 255, 0.3);
-    box-shadow: inset 0 4px 6px rgba(0, 255, 255, 0.2);
-  }
-  
-  .productImage {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-    transition: transform 0.5s ease;
-    border-radius: 15px 15px 0 0;
-    z-index: 1;
-  }
-  
-  .infoIcon {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    color: #ffffff;
-    background: rgba(0, 0, 0, 0.5);
-    border-radius: 50%;
-    padding: 4px;
-    z-index: 2;
-    transition: transform 0.2s ease;
-  }
-  
-  .infoIcon:active {
-    transform: scale(1.1);
-  }
-  
-  .cardContent {
-    position: relative;
-    margin-top: -30px;
-    padding: 10px;
-    background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(30, 30, 40, 0.8));
-    border-top: 2px solid rgba(0, 255, 255, 0.3);
-    border-radius: 0 0 15px 15px;
-    max-height: 170px;
-    overflow: hidden;
-    transition: max-height 0.4s ease;
-  }
-  
-  .card.expanded .cardContent {
-    max-height: 300px;
+    transform: none;
   }
   
   .productName,
-  .type,
-  .priceRow,
-  .ratingSection {
-    opacity: 0;
-    transform: translateY(10px);
-    animation: fadeUp 0.4s ease forwards;
+  .productType,
+  .ratingContainer,
+  .priceContainer {
+    opacity: 1;
+    transform: none;
+    animation: none;
   }
-  .productName { animation-delay: 0.2s; 
-    font-size: 13.5px; 
-    font-weight: 500; 
-    color: #00ffff; 
-    transition: color 0.3s; 
-    font-family: "Roboto", sans-serif;
-
 }
-  .type         { animation-delay: 0.4s; color: #ffffff; font-size: 12px; }
-  .priceRow     { animation-delay: 0.6s; display: flex; align-items: center; margin-top: -6px; }
-  .ratingSection{ animation-delay: 0.8s; margin-top: -8px; display: flex; align-items: center; }
-  
-  @keyframes fadeUp {
-    to { opacity: 1; transform: translateY(0); }
+
+@media (prefers-contrast: high) {
+  .card {
+    border-width: 2px;
   }
   
-  .priceRow .productPrice {
-    font-size: 13px;
-    color: #ff6600;
-    font-weight: bold;
-  }
-  .priceRow .discount {
-    font-size: 12px;
-    color: #FFA500;
-    margin-left: 10px;
-    font-weight: bold;
-  }
-  
+  .productName,
   .ratingText {
-    margin-left: 4px;
-    font-size: 12px;
     color: #ffffff;
   }
-
-  @media (max-width: 760px) {
-    .card {
-      width: 160px;  
-      max-width: none;
-      margin: 6px;                
-      transform: none;            
-    }
-  
-    .card.visible {
-      transform: translateY(0);
-    }
-  
-    .card:hover {
-      transform: none;
-      box-shadow: 0 6px 20px rgba(0,255,255,0.3);
-    }
-  
-    .card:active {
-      transform: scale(0.97);
-    }
-  
-    .imageContainer { border-bottom-width: 1px; }
-    .productImage { height: 140px; }       
-    .infoIcon { padding: 4px; }
-  
-    .cardContent {
-      margin-top: -30px;
-      padding: 10px;
-      max-height: 220px;
-    }
-    .card.expanded .cardContent { max-height: 320px; }
-  
-    .productName { font-size: 14px;
-         animation-delay: 0.15s;
-         margin-bottom: 7px;
-         }
-    .type { font-size: 12px;
-         animation-delay: 0.3s;
-         }
-    .priceRow { animation-delay: 0.45s; }
-    .priceRow .productPrice { font-size: 14px; }
-    .priceRow .discount     { font-size: 12px; }
-    .ratingSection { animation-delay: 0.6s; }
-    .ratingSection svg { width: 16px; height: 16px; }
-    .ratingText { font-size: 12px; }
-  }
-  
-
-
-
+}

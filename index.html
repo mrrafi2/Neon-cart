@@ -1,10 +1,38 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Primary Meta Tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Neon‑Cart: your ultimate neon‑themed e‑commerce platform— eye catching, fast, accessible, and blazing with style." />
+    <meta name="theme-color" content="#0f0f0f" />
+
+    <!-- SEO & Crawling -->
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://neon-cart.vercel.app/" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Neon‑Cart" />
+    <meta property="og:description" content="Shop neon‑list products with a cosmic vibe. Fast, smooth, and unforgettable." />
+    <meta property="og:url" content="https://neon-cart.vercel.app/" />
+    <meta property="og:image" content="/favicon-96x96.png" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Neon‑Cart" />
+    <meta name="twitter:description" content="Shop neon‑list products with a cosmic vibe. Fast, smooth, and unforgettable." />
+    <meta name="twitter:image" content="/favicon-96x96.png" />
+
+    <!-- Favicons & App Icons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="mask-icon" href="/favicon.svg" color="#0f0f0f" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
@@ -21,11 +49,30 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
 
-    <title>Neon-Cart</title>
+    <title>Neon‑Cart</title>
+    
   </head>
   <body>
+    <a class="visually-hidden-focusable" href="#main">Skip to main content</a>
+
     <div id="root"></div>
+    <div id="cart-root"></div>
+
+    <!-- No‑JS warning -->
+    <noscript>
+      <p style="text-align:center; padding:1rem; background:#fdd;">
+        JavaScript is disabled in your browser. Neon‑Cart needs JavaScript to work—please enable it.
+      </p>
+    </noscript>
+
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

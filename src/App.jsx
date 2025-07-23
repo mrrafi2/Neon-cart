@@ -1,29 +1,34 @@
-import { AuthProvider } from "./components/contexts/AuthContext";
+import { AuthProvider } from "./contexts/AuthContext";
 import "./App.css";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
-import Layout from "./components/layout";
+import Layout from "./components/layout/layout";
 import Home from "./components/pages/home";
-import Login from "./components/pages/login";
-import Signup from "./components/pages/signup";
-import Sell from "./components/sellProduct";
-import ProductDetail from "./components/pages/productDetail";
-import Products from "./components/products";
-import BuyNow from "./components/pages/buy";
-import SellerDashboard from "./components/pages/sellerDash";
-import ScrollToTop from "./components/scrollToTop";
-import SearchResults from "./components/searchresult";
-import PrivateRoute from "./components/PrivateRoute";
+import Login from "./components/auth/login";
+import Signup from "./components/auth/signup";
+import Sell from "./components/seller/sellProduct";
+import ProductDetail from "./components/productRelated/productDetail";
+import Products from "./components/productRelated/products";
+import BuyNow from "./components/buyer/buy";
+import SellerApply from "./components/common/sellerApply";
+import SellerDashboard from "./components/seller/sellerDash";
+import ScrollToTop from "./components/common/scrollToTop";
+import SearchResults from "./components/search/searchresult";
+import PrivateRoute from "./components/common/PrivateRoute";
+import PrivateSellerRoute from "./components/seller/sellerRoute";
 import Contact from "./components/pages/contact";
-import About from "./components/about";
-import HelpFAQ from "./components/help";
+import About from "./components/pages/about";
+import HelpFAQ from "./components/pages/help";
+import {CartProvider} from "./contexts/CartContext"
 
 function App() {
   return (
     <AuthProvider>
+      <CartProvider>
       <BrowserRouter>
         <ScrollToTop />
         <AppRoutes />
       </BrowserRouter>
+      </CartProvider>
     </AuthProvider>
   );
 }
@@ -31,7 +36,7 @@ function App() {
 function AppRoutes() {
   const location = useLocation();
 
-  const noLayoutPages = ["/login", "/signup", "/sell", "/seller-dashboard", "/buy","/contact","/about","/help"
+  const noLayoutPages = ["/login", "/signup", "/sell", "/seller-dashboard", "/buy","/contact","/about","/help", "/seller-apply"
   ];
 
   const isNoLayout = noLayoutPages.includes(location.pathname);
@@ -42,7 +47,6 @@ function AppRoutes() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/seller-dashboard" element={<SellerDashboard />} />
           <Route
             path="/buy"
             element={
@@ -51,16 +55,25 @@ function AppRoutes() {
               </PrivateRoute>
             }
           />
+        
+        <Route
+          path="/sell"
+          element={
+            <PrivateSellerRoute>
+              <Sell />
+            </PrivateSellerRoute>
+          }
+        />
+        <Route
+          path="/seller-dashboard"
+          element={
+            <PrivateSellerRoute>
+              <SellerDashboard />
+            </PrivateSellerRoute>
+          }
+        />
 
-     <Route
-            path="/sell"
-            element={
-              <PrivateRoute>
-                <Sell />
-              </PrivateRoute>
-            }
-          />
-
+        <Route path="/seller-apply" element={<SellerApply />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/about" element={<About />} />
 
