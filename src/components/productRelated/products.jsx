@@ -140,7 +140,6 @@ export default function Products() {
            <rect x="3" y="14" width="7" height="7"></rect>
          </svg>
        </div>
-       <span className={styles.triggerText}>Categories</span>
        <div className={styles.triggerPulse}></div>
      </button>
 

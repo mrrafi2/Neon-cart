@@ -15,8 +15,6 @@ import ScrollToTop from "./components/common/scrollToTop";
 import SearchResults from "./components/search/searchresult";
 import PrivateRoute from "./components/common/PrivateRoute";
 import PrivateSellerRoute from "./components/seller/sellerRoute";
-import AdminDashboard from "./components/admin/adminDashboard";
-import ProtectedAdminRoute from "./components/admin/adminRoute";
 import Contact from "./components/pages/contact";
 import About from "./components/pages/about";
 import HelpFAQ from "./components/pages/help";
@@ -75,14 +73,7 @@ function AppRoutes() {
           }
         />
 
-        <Route
-  path="/admin"
-  element={
-    <ProtectedAdminRoute>
-      <AdminDashboard />
-    </ProtectedAdminRoute>
-  }
-/>
+        
 
         <Route path="/seller-apply" element={<SellerApply />} />
         <Route path="/contact" element={<Contact />} />

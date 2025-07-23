@@ -18,7 +18,7 @@ import styles from "../style/topNav.module.css";
 
 
 export default function TopNav() {
-  const { currentUser, isAdmin } = useAuth();
+  const { currentUser, isSeller } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -67,14 +67,10 @@ const [sellerData] = useObjectVal(sellerRef);
        <>
 
       <div className={styles.sellerSection}>
-        
-  <Link to="/admin" className={styles.adminLink}>
-     Admin
-    <span className={styles.adminBadge}>Admin</span>
-  </Link>
+      
 
         {currentUser ? (
-          sellerData?.isApproved ? (
+          sellerData?.profile?.businessName && sellerData?.profile?.address && sellerData?.profile?.taxId ?  (
             <>
               <Link to="/seller-dashboard" className={styles.sellLink}>
                 <FaStore />

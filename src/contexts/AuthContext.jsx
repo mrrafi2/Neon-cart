@@ -11,7 +11,7 @@ import {
   signInWithRedirect,
   getRedirectResult,
 } from "firebase/auth";
-import { ref, set, get, update, onValue } from "firebase/database";
+import { ref, set, get, update } from "firebase/database";
 import "../firebaseInit/firebase";
 import { db } from "../firebaseInit/firebase";
 
@@ -25,7 +25,7 @@ export function AuthProvider({ children }) {
   const auth = getAuth();
   const [currentUser, setCurrentUser] = useState(null);
   const [loadingAuth, setLoadingAuth] = useState(true);
-  const [isAdmin, setIsAdmin] = useState(null);
+const [isSeller, setIsSeller] = useState(false);
 
   useEffect(() => {
     getRedirectResult(auth)
@@ -38,24 +38,23 @@ export function AuthProvider({ children }) {
       .catch(console.error);
   }, [auth]);
 
-  useEffect(() => {
+ useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         await ensureUserInDatabase(user);
         setCurrentUser(user);
-       
-      const adminRef = ref(db, `admins/${user.uid}`);
-      get(adminRef).then((snap) => {
-        const admin = !!snap.val();
-        setIsAdmin(admin);
-        setLoadingAuth(false); 
-      });
+
+        const sellerRef = ref(db, `users/${user.uid}/seller/isSeller`);
+        const snap = await get(sellerRef);
+        setIsSeller(!!snap.val());
+
       } else {
         setCurrentUser(null);
-        setIsAdmin(false);
+        setIsSeller(false);
       }
       setLoadingAuth(false);
     });
+
     return unsubscribe;
   }, [auth]);
 
@@ -72,7 +71,7 @@ export function AuthProvider({ children }) {
       avatarIcon: null,
       avatarBgColor: null,
       seller: {
-        isApproved: false,
+        isSeller: false,
         appliedAt: null,
         milestones: {
           emailVerified: user.emailVerified || false,
@@ -106,7 +105,7 @@ export function AuthProvider({ children }) {
       avatarIcon: null,
       avatarBgColor: null,
       seller: {
-        isApproved: false,
+         isSeller: false,
         appliedAt: null,
         milestones: {
           emailVerified: cred.user.emailVerified || false,
@@ -174,7 +173,7 @@ export function AuthProvider({ children }) {
     loginWithGoogle,
     logout,
     updateUser,
-    isAdmin,
+     isSeller,
   };
 
   return (
