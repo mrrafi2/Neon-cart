@@ -67,12 +67,12 @@ const [sellerData] = useObjectVal(sellerRef);
        <>
 
       <div className={styles.sellerSection}>
-        {currentUser && isAdmin && (
+        
   <Link to="/admin" className={styles.adminLink}>
      Admin
     <span className={styles.adminBadge}>Admin</span>
   </Link>
-)}
+
         {currentUser ? (
           sellerData?.isApproved ? (
             <>

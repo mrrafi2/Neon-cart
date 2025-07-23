@@ -8,6 +8,9 @@ export default function ProtectedAdminRoute({ children }) {
   if (!currentUser) {
     return <Navigate to="/login" replace />;
   }
+if (isAdmin === null) {
+    return <div>Checking admin access...</div>; 
+  }
 
   if (!isAdmin) {
     return <Navigate to="/" replace />;

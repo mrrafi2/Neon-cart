@@ -25,7 +25,7 @@ export function AuthProvider({ children }) {
   const auth = getAuth();
   const [currentUser, setCurrentUser] = useState(null);
   const [loadingAuth, setLoadingAuth] = useState(true);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(null);
 
   useEffect(() => {
     getRedirectResult(auth)
@@ -43,10 +43,13 @@ export function AuthProvider({ children }) {
       if (user) {
         await ensureUserInDatabase(user);
         setCurrentUser(user);
-        const adminRef = ref(db, `admins/${user.uid}`);
-        onValue(adminRef, (snap) => {
-          setIsAdmin(!!snap.val());
-        });
+       
+      const adminRef = ref(db, `admins/${user.uid}`);
+      get(adminRef).then((snap) => {
+        const admin = !!snap.val();
+        setIsAdmin(admin);
+        setLoadingAuth(false); 
+      });
       } else {
         setCurrentUser(null);
         setIsAdmin(false);
@@ -125,7 +128,6 @@ export function AuthProvider({ children }) {
     return signInWithEmailAndPassword(auth, email, password);
   }
 
-  // Google login with popup → redirect fallback
   async function loginWithGoogle() {
     const provider = new GoogleAuthProvider();
     try {
