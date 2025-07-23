@@ -11,7 +11,7 @@ import {
   signInWithRedirect,
   getRedirectResult,
 } from "firebase/auth";
-import { ref, set, get, update } from "firebase/database";
+import { ref, set, get, update, onValue } from "firebase/database";
 import "../firebaseInit/firebase";
 import { db } from "../firebaseInit/firebase";
 
@@ -25,6 +25,7 @@ export function AuthProvider({ children }) {
   const auth = getAuth();
   const [currentUser, setCurrentUser] = useState(null);
   const [loadingAuth, setLoadingAuth] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     getRedirectResult(auth)
@@ -42,8 +43,13 @@ export function AuthProvider({ children }) {
       if (user) {
         await ensureUserInDatabase(user);
         setCurrentUser(user);
+        const adminRef = ref(db, `admins/${user.uid}`);
+        onValue(adminRef, (snap) => {
+          setIsAdmin(!!snap.val());
+        });
       } else {
         setCurrentUser(null);
+        setIsAdmin(false);
       }
       setLoadingAuth(false);
     });
@@ -96,6 +102,20 @@ export function AuthProvider({ children }) {
       gender: gender || null,
       avatarIcon: null,
       avatarBgColor: null,
+      seller: {
+        isApproved: false,
+        appliedAt: null,
+        milestones: {
+          emailVerified: cred.user.emailVerified || false,
+          recaptchaPassed: false,
+          phoneVerified: false
+        },
+        profile: {
+          businessName: null,
+          address: null,
+          taxId: null
+        }
+      }
     });
     setCurrentUser({ ...cred.user, displayName: username });
   }
@@ -152,6 +172,7 @@ export function AuthProvider({ children }) {
     loginWithGoogle,
     logout,
     updateUser,
+    isAdmin,
   };
 
   return (

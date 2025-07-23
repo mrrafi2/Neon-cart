@@ -6,6 +6,35 @@
   z-index: 10;
 }
 
+.adminLink {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.4rem 0.8rem;
+  border: 2px solid #ff6ec7;
+  border-radius: 6px;
+  color: #ff6ec7;
+  background: rgba(255, 110, 199, 0.1);
+  font-weight: bold;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.adminLink:hover {
+  background: #ff6ec7;
+  color: white;
+}
+
+.adminBadge {
+  background-color: #ff6ec7;
+  color: white;
+  padding: 2px 6px;
+  font-size: 0.7rem;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+
 .sellLink,
 .sellButton {
   position: relative;

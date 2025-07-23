@@ -18,7 +18,7 @@ import styles from "../style/topNav.module.css";
 
 
 export default function TopNav() {
-  const { currentUser } = useAuth();
+  const { currentUser, isAdmin } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -65,7 +65,14 @@ const [sellerData] = useObjectVal(sellerRef);
   return (
     <>
        <>
+
       <div className={styles.sellerSection}>
+        {currentUser && isAdmin && (
+  <Link to="/admin" className={styles.adminLink}>
+     Admin
+    <span className={styles.adminBadge}>Admin</span>
+  </Link>
+)}
         {currentUser ? (
           sellerData?.isApproved ? (
             <>
