@@ -502,16 +502,20 @@
   100% { transform: rotate(360deg); }
 }
 
-/* Responsive Design */
 @media (max-width: 1024px) {
   .orderContent {
-    grid-template-columns: 1fr;
+     display: flex;
+    flex-direction: column;  
     gap: 30px;
+  }
+
+  .leftSection {
+    order: 0;
   }
   
   .rightSection {
     position: static;
-    order: -1;
+    order: 1;
   }
   
   .formGrid {

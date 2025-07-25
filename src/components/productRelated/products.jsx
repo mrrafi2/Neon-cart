@@ -13,6 +13,12 @@ export default function Products() {
   const [conditionFilter, setConditionFilter] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
   const [showCategoryOffcanvas, setShowCategoryOffcanvas] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false); 
+  const [filters, setFilters] = useState([]); 
+  const [sortBy, setSortBy] = useState("rating"); 
+  const [viewMode, setViewMode] = useState("grid"); 
+  const [quickViewProduct, setQuickViewProduct] = useState(null); 
+
   const pageSize = 18;
 
   const { category, subcategory } = useParams();
@@ -86,7 +92,7 @@ export default function Products() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [currentPage]);
 
-  if (loading) {
+ if (loading) {
     return (
       <div className={styles.loadingContainer}>
         <div className={styles.loadingContent}>
@@ -143,7 +149,6 @@ export default function Products() {
        <div className={styles.triggerPulse}></div>
      </button>
 
-      {/* Category Offcanvas */}
       <div className={`${styles.offcanvasOverlay} ${showCategoryOffcanvas ? styles.offcanvasOpen : ''}`}>
         <div className={styles.offcanvasContent}>
           <div className={styles.offcanvasHeader}>

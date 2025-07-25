@@ -6,15 +6,15 @@ import { useObjectVal } from "react-firebase-hooks/database";
 import { db } from "../../firebaseInit/firebase";
 import LoadingSpinner from "../common/loading";
 
-export default function PrivateSellerRoute( { children } ) {
-  const { currentUser } = useAuth( );
+export default function PrivateSellerRoute({ children }) {
+  const { currentUser } = useAuth();
 
-  const isApprovedRef = currentUser
-    ? ref(db, `users/${currentUser.uid}/seller/isApproved`)
+  const sellerRef = currentUser
+    ? ref(db, `users/${currentUser.uid}/seller`)
     : null;
-  const [isApproved, loading ] = useObjectVal( isApprovedRef );
+  const [sellerData, loading, error] = useObjectVal(sellerRef);
 
-  if ( !currentUser ) {
+  if (!currentUser) {
     return <Navigate to="/login" replace />;
   }
 
@@ -22,8 +22,14 @@ export default function PrivateSellerRoute( { children } ) {
     return <LoadingSpinner />;
   }
 
-  if (!isApproved) {
-    return <Navigate to="/" replace />;
+  const { profile } = sellerData || {};
+  const isFullSeller =
+    profile?.businessName &&
+    profile?.address &&
+    profile?.taxId;
+
+  if (!isFullSeller) {
+    return <Navigate to="/seller-apply" replace />;
   }
 
   return children;

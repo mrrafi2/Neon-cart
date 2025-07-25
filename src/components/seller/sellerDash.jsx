@@ -6,9 +6,24 @@ import LoadingSpinner from "../common/loading";
 
 export default function SellerDashboard() {
   const { currentUser } = useAuth();
+    const [showProfile, setShowProfile] = useState(true);
+   const [profile, setProfile] = useState(null);
+  const [profileLoading, setProfileLoading] = useState(true);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editStates, setEditStates] = useState({});
+
+
+  useEffect(() => {
+    if (!currentUser) return;
+    const db = getDatabase();
+    const sellerRef = ref(db, `users/${currentUser.uid}/seller/profile`);
+    const unsubscribe = onValue(sellerRef, (snap) => {
+      setProfile(snap.val());
+      setProfileLoading(false);
+    });
+    return () => unsubscribe();
+  }, [currentUser]);
 
   useEffect(() => {
     if (!currentUser) return;
@@ -29,7 +44,6 @@ export default function SellerDashboard() {
         );
         setProducts(sellerProducts);
 
-        // Initialize edit states for each product if not already set
         const newEditStates = {};
         sellerProducts.forEach((prod) => {
           newEditStates[prod.id] = {
@@ -96,7 +110,6 @@ export default function SellerDashboard() {
 
   const saveDiscount = async (productId, originalPrice) => {
     const discount = parseFloat(editStates[productId].discount);
-    // Calculate new price: discountPercentage applied (rounded to whole number)
     const discountedPrice = originalPrice * (1 - discount / 100);
     const db = getDatabase();
     const productRef = ref(db, `products/${productId}`);
@@ -121,7 +134,6 @@ export default function SellerDashboard() {
       const productRef = ref(db, `products/${productId}`);
       try {
         await remove(productRef);
-        // Optionally, update local state to remove the product immediately
         setProducts((prev) => prev.filter((prod) => prod.id !== productId));
       } catch (error) {
         console.error("Error removing product:", error);
@@ -137,8 +149,17 @@ export default function SellerDashboard() {
     );
   }
 
+   if (profileLoading) {
+    return (
+      <div className={styles.loadingContainer}>
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
   return (
     <div className={styles.dashboardContainer}>
+      
       <div className={styles.header}>
         <div className={styles.headerContent}>
           <h1 className={styles.heading}>
@@ -149,8 +170,21 @@ export default function SellerDashboard() {
                 <path d="M12 3v6"></path>
               </svg>
             </span>
-            My Store Dashboard
+           {profile.businessName+ " Dashboard" || "My Store Dashboard"}
           </h1>
+
+          <button
+  className={styles.profileToggle}
+  onClick={() => setShowProfile(prev => !prev)}
+  aria-expanded={showProfile}
+>
+  {showProfile
+    ? <><svg viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg> Hide Profile</>
+    : <> Show Profile</>
+  }
+</button>
+
+
           <div className={styles.storeStats}>
             <div className={styles.statItem}>
               <span className={styles.statValue}>{products.length}</span>
@@ -167,6 +201,57 @@ export default function SellerDashboard() {
         </div>
         <div className={styles.headerLine}></div>
       </div>
+
+      {showProfile && (
+        <div className={styles.profileCard + " " + styles.slideIn}>
+          <button
+            className={styles.profileClose}
+            onClick={() => setShowProfile(false)}
+            aria-label="Close Profile"
+          >×</button>
+
+          <h2 className={styles.profileTitle}>Your Seller Profile</h2>
+          <div className={styles.profileGrid}>
+            <div className={styles.profileItem}>
+              <strong>Business Name</strong>
+              <span>{profile.businessName}</span>
+            </div>
+            <div className={styles.profileItem}>
+              <strong>Address</strong>
+              <span>{profile.address}</span>
+            </div>
+            <div className={styles.profileItem}>
+              <strong>Tax ID</strong>
+              <span>{profile.taxId}</span>
+            </div>
+            <div className={styles.profileItem}>
+              <strong>Phone</strong>
+              <span>{profile.phone}</span>
+            </div>
+            <div className={styles.profileItem}>
+              <strong>Email</strong>
+              <span>{profile.email}</span>
+            </div>
+            <div className={styles.profileItem}>
+              <strong>National ID</strong>
+              <span>{profile.nationalId}</span>
+            </div>
+            {profile.website && (
+              <div className={styles.profileItem}>
+                <strong>Website</strong>
+                <a href={profile.website} target="_blank" rel="noopener noreferrer">
+                  {profile.website}
+                </a>
+              </div>
+            )}
+            <div className={styles.profileItemFull}>
+              <strong>Description</strong>
+              <p>{profile.description}</p>
+            </div>
+          </div>
+          </div>
+      )}
+          
 
       {products.length === 0 ? (
         <div className={styles.emptyState}>

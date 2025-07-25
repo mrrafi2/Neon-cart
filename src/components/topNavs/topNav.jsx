@@ -4,6 +4,7 @@ import {
   FaQuestionCircle, 
   FaPhone, 
   FaGlobe, 
+  FaBell,
   FaInfoCircle, 
 } from "react-icons/fa";
 import { FiMoreHorizontal } from 'react-icons/fi';
@@ -32,7 +33,7 @@ export default function TopNav() {
   const navItems = [
     { icon: <FaQuestionCircle size={15} />, label: "Help", link: "/help" },
     { icon: <FaPhone size={15} />, label: "Contact", link: "/contact" },
-    { icon: <FaGlobe size={15} />, label: "Language", link: "/language" },
+     { icon: <FaBell   size={15} />, label: "Notifications", link: "/"},
     { icon: <FaInfoCircle size={15} />, label: "About", link: "/about" },
   ];
 
