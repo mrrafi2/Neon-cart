@@ -15,6 +15,7 @@ neonCart isn’t just another shopping site. It was born from a need to bridge t
 * [Problem Solving Philosophy](#problem-solving-philosophy)
 * [Challenges Tackled](#challenges-tackled)
 * [Future Roadmap](#future-roadmap)
+* [Contributing](#contributing)
 * [License](#license)
 
 ---
