@@ -14,7 +14,7 @@ import styles from "../style/cart.module.css";
 
 export default function CartDropdown() {
 
-   // Grab cart items, dispatch magic from context
+   // grab cart items, dispatch magic from context
   const cart = useCart();
   const dispatch = useCartDispatch();
 
@@ -34,7 +34,7 @@ export default function CartDropdown() {
     return ( ) => document.removeEventListener("mousedown", handleClick);
   }, [ ] );
 
-   // Called when user taps +/-; animate then update qty or remove
+   // called when user taps +/-; animate then update qty or remove
   const handleQuantityChange= ( itemId, newQty ) => {
     if ( newQty <= 0 ) {
       handleRemoveItem( itemId );
@@ -51,7 +51,7 @@ export default function CartDropdown() {
     }, 300);  // 300ms to let the CSS wiggle finish
   };
 
-    // Remove item with a little effect/drama
+    // remove item with a little effect/drama
   const handleRemoveItem= ( itemId ) => {
     setAnimatingItems ( prev => new Set ( [...prev, itemId] ));
     setTimeout( ( ) => {
@@ -98,7 +98,7 @@ export default function CartDropdown() {
         )}
       </button>
 
-      {/* Dropdown Panel */}
+      {/* dropdown Panel */}
       {open && (
         <div className={styles.dropdown}>
           <div className={styles.dropdownHeader}>
@@ -107,7 +107,7 @@ export default function CartDropdown() {
           </div>
 
           {cart.length === 0 ? (
-          // 🕳️ empty state-sad cart vibes
+          //  empty state-sad cart vibes
             <div className={styles.emptyState}>
               <div className={styles.emptyIcon}>
                 <FaShoppingCart size={40} />
@@ -195,5 +195,5 @@ export default function CartDropdown() {
   );
 
   return createPortal(dropdownJSX, portalRoot);
-  
+
 }
