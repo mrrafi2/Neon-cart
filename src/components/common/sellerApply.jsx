@@ -1,3 +1,5 @@
+// here normal folks turn into business legends.
+
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { ref, update } from "firebase/database";
 import { db } from "../../firebaseInit/firebase";
@@ -7,9 +9,9 @@ import { useNavigate } from "react-router-dom";
 import { useDropzone } from "react-dropzone";
 import styles from "../style/sellerApply.module.css";
 
-export default function SellerApply({  }) {
+export default function SellerApply() {
   const { currentUser } = useAuth();
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
 
   const [businessName, setBusinessName] = useState("");
   const [address, setAddress] = useState("");
@@ -28,7 +30,7 @@ export default function SellerApply({  }) {
   const [error, setError] = useState("");
   const recaptchaRef = useRef();
 
-  // Progress tracking
+  // fill progress tracking
   const [completedFields, setCompletedFields] = useState(new Set());
   const [currentStep, setCurrentStep] = useState(1);
 
@@ -45,6 +47,7 @@ export default function SellerApply({  }) {
     maxFiles: 5,
   });
 
+//  Clean slate vibes when page loads.
   useEffect(() => {
     setError("");
     setSubmitting(false);
@@ -61,7 +64,7 @@ export default function SellerApply({  }) {
     recaptchaRef.current?.reset();
   }, []);
 
-  // Track field completion
+  // prograss track field completion
   useEffect(() => {
     const newCompletedFields = new Set();
     
@@ -77,7 +80,6 @@ export default function SellerApply({  }) {
 
     setCompletedFields(newCompletedFields);
 
-    // Update current step based on completion
     if (newCompletedFields.size >= 7) {
       setCurrentStep(3);
     } else if (newCompletedFields.size >= 4) {
@@ -87,6 +89,7 @@ export default function SellerApply({  }) {
     }
   }, [businessName, address, taxId, nationalId, phone, email, description, documents, captchaToken]);
 
+  //  Handles the big moment - captcha, uploads, Firebase magic.
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -179,13 +182,13 @@ export default function SellerApply({  }) {
   return (
     <div className={styles.container}>
       <div className={styles.formWrapper}>
-        {/* Header */}
+        {/* doc header */}
         <div className={styles.header}>
           <h1 className={styles.title}>Become a Seller</h1>
           <p className={styles.subtitle}>Join our marketplace and start selling your products</p>
         </div>
 
-        {/* Progress Section */}
+        {/* field progress track section */}
         <div className={styles.progressSection}>
           <div className={styles.progressBar}>
             <div 
@@ -198,7 +201,7 @@ export default function SellerApply({  }) {
           </div>
         </div>
 
-        {/* Steps Indicator */}
+        {/*the master stepss indicator */}
         <div className={styles.stepsContainer}>
           {steps.map((step) => (
             <div 
@@ -222,14 +225,14 @@ export default function SellerApply({  }) {
           ))}
         </div>
 
-        {/* Form */}
-        <form
+
+    <form
           className={styles.form}
           onSubmit={handleSubmit}
           aria-busy={submitting}
           aria-labelledby="sellerApplyTitle"
-        >
-          {error && (
+    >
+ {error && (
             <div className={styles.errorAlert} role="alert" tabIndex={-1}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <circle cx="12" cy="12" r="10"></circle>
@@ -238,10 +241,9 @@ export default function SellerApply({  }) {
               </svg>
               {error}
             </div>
-          )}
+        )}
 
-          {/* Step 1: Basic Information */}
-          <div className={styles.formSection}>
+    <div className={styles.formSection}>
             <h3 className={styles.sectionTitle}>
               <span className={styles.sectionIcon}>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -339,19 +341,18 @@ export default function SellerApply({  }) {
                   disabled={submitting}
                   placeholder="Enter your 10 to 17 digit National ID number"
                   className={styles.input}
-                />
-                {completedFields.has('nationalId') && (
+         />
+        {completedFields.has('nationalId') && (
                   <div className={styles.fieldCheck}>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <polyline points="20,6 9,17 4,12"></polyline>
                     </svg>
-                  </div>
+    </div>
                 )}
               </div>
             </div>
-          </div>
+    </div>
 
-          {/* Step 2: Contact Information */}
           <div className={styles.formSection}>
             <h3 className={styles.sectionTitle}>
               <span className={styles.sectionIcon}>
@@ -450,9 +451,7 @@ export default function SellerApply({  }) {
               )}
             </div>
           </div>
-
-          {/* Step 3: Documents and Verification */}
-          <div className={styles.formSection}>
+                    <div className={styles.formSection}>
             <h3 className={styles.sectionTitle}>
               <span className={styles.sectionIcon}>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -522,7 +521,8 @@ export default function SellerApply({  }) {
                 </ul>
               </div>
             )}
-
+         
+         {/*   prove you’re not a toaster. */}
             <div className={`${styles.field} ${completedFields.has('captcha') ? styles.fieldCompleted : ''}`}>
               <label>Security Verification</label>
               <div className={styles.captchaWrapper}>
@@ -542,7 +542,7 @@ export default function SellerApply({  }) {
             </div>
           </div>
 
-          {/* Actions */}
+          {/* action buttons */}
           <div className={styles.actions}>
             <button
               type="button"

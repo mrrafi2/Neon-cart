@@ -1,3 +1,5 @@
+// this component renders the user avatar button and profile overlay (with logout dialog) in a slick, animated UI.
+
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { createPortal } from "react-dom";
@@ -6,32 +8,18 @@ import { motion, AnimatePresence } from "framer-motion";
 import styles from "../style/account.module.css";
 
 export default function Account() {
-  const { currentUser, logout, updateUser } = useAuth();
+  const { currentUser, logout } = useAuth();
   const [showAccountOverlay, setShowAccountOverlay] = useState(false);
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
 
     currentUser?.displayName || "User"
 
-    const portalRoot = document.getElementById("cart-root");
-  if (!portalRoot) {
-    console.error(" No #cart-root found for portal!");
-    return null;
-  }
   
   const [editedAvatarIcon, setEditedAvatarIcon] = useState(null);
   const [customAvatarBgColor, setCustomAvatarBgColor] = useState("");
 
-  const defaultStringToColor = (str) => {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-      hash = str.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    const hue = Math.abs(hash) % 360;
-    return `hsl(${hue}, 70%, 60%)`;
-  };
-
-  const displayName = currentUser?.displayName || "User";
-
+    // Calculate display name & initials
+   const displayName = currentUser?.displayName || "User";
   let storedAvatarIcon = null;
   let storedAvatarBgColor = "";
   if (currentUser?.photoURL) {
@@ -40,7 +28,8 @@ export default function Account() {
       storedAvatarIcon = data.avatarIcon;
       storedAvatarBgColor = data.avatarBgColor;
     } catch (e) {
-      console.error("Data error");
+      //  error tracking
+    console.error("Failed to parse avatar JSON:", e);
     }
   }
 
@@ -51,21 +40,34 @@ export default function Account() {
         setEditedAvatarIcon(data.avatarIcon || null);
         setCustomAvatarBgColor(data.avatarBgColor || "");
       } catch (e) {
-        console.error("Error parsing photoURL");
+        console.error("Error parsing photoURL : ",e);
       }
     }
   }, [currentUser]);
 
+  const defaultStringToColor = (str) => {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const hue = Math.abs(hash) % 360;
+    return `hsl(${hue}, 70%, 60%)`;
+  };
+
+  //finally pick a  background color for each user, based on their name
   const avatarBgColor =
     customAvatarBgColor || storedAvatarBgColor || defaultStringToColor(displayName);
-
-  const initials = displayName
+    const initials = displayName
     .split(" ")
     .filter(Boolean)
     .map((word) => word[0].toUpperCase())
     .join("");
 
-
+    const portalRoot = document.getElementById("cart-root");
+  if (!portalRoot) {
+    console.error(" No cart-root found for portal!");
+    return null;
+  }
 
   
   const handleLogout = async () => {
@@ -74,7 +76,7 @@ export default function Account() {
     setShowLogoutDialog(false);
   };
 
-  
+  // account overlay open when user cliks on account icon
    const accountOverlay = (
     <AnimatePresence>
       {showAccountOverlay && (
@@ -96,11 +98,29 @@ export default function Account() {
             >
               ×
             </button>
-            <h4 className={styles.accountName}>{displayName}</h4>
-            <p className={styles.accountEmail}>{currentUser.email}</p>
-            {currentUser.phone  && <p className={styles.accountDetail}>Phone:{currentUser.phone}</p>}
-            {currentUser.gender && <p className={styles.accountDetail}>Gender: {currentUser.gender}</p>}
+
+            <h4 className={styles.accountName}>
+              {displayName}
+              </h4>
+
+            <p className={styles.accountEmail}>
+              {currentUser.email}
+              </p>
+
+            {currentUser.phoneNumber  && 
+            <p className={styles.accountDetail}>
+              Phone:{currentUser.phoneNumber}
+              </p>
+              }
+
+          { currentUser.gender &&
+           <p className={styles.accountDetail}>
+            Gender: {currentUser.gender}
+            </p>
+            }
+
             <div className={styles.buttonGroup}>
+
               <button
                 className={styles.futuristicButton}
                 onClick={() => setShowLogoutDialog(true)}
@@ -114,6 +134,8 @@ export default function Account() {
     </AnimatePresence>
   );
 
+  // logout dialog is for confirming logout
+  // logout dialog open when user clicks on logout button 
   const logoutDialog = (
     <AnimatePresence>
       {showLogoutDialog && (
@@ -134,11 +156,7 @@ export default function Account() {
             <div className={styles.dialogButtons}>
               <button
                 className={styles.futuristicButton}
-                onClick={async () => {
-                  await logout();
-                  setShowLogoutDialog(false);
-                  setShowAccountOverlay(false);
-                }}
+                onClick={handleLogout}
               >
                 Yes
               </button>
@@ -158,12 +176,16 @@ export default function Account() {
   return (
     <div className={styles.accountContainer}>
       <div className={styles.accountIconWrapper}>
+
         {currentUser ? (
+
           <div
             className={styles.accountIcon}
             title={displayName}
+            style={{ backgroundColor: avatarBgColor }}
             onClick={() => setShowAccountOverlay(!showAccountOverlay)}
           >
+
             {editedAvatarIcon || storedAvatarIcon ? (
               <i className={editedAvatarIcon || storedAvatarIcon}></i>
             ) : (

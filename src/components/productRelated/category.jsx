@@ -1,8 +1,11 @@
+//category and subcategory dropdown, exported to the products.jsx file
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "../style/category.module.css";
-import { h2 } from "framer-motion/client";
 
+//inintial in-component test purpose category data
+// of course I will remove it to a json file later if needed
 const categoryData = {
   Electronics: [
     "Desktop Computers",
@@ -49,6 +52,7 @@ export default function Category({ onCategorySelect }) {
   const navigate = useNavigate();
   const [expandedCategories, setExpandedCategories] = useState({});
 
+  //  expands or hides categories like an accordion with secrets.
 const toggleCategory = (category) => {
   setExpandedCategories(prev => ({
     ...prev,

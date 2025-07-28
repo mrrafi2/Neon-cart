@@ -1,3 +1,5 @@
+//loading animation design
+
 import React from "react";
 import styles from "../style/loading.module.css";
 
@@ -5,6 +7,9 @@ export default function LoadingSpinner() {
   return (
     <div className={styles.spinnerContainer}>
       <div className={styles.spinner}></div>
+      <div className={styles.loadingText}>
+        Waiting for Magnificence...
+      </div>
     </div>
   );
 }

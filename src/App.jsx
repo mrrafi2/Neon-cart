@@ -1,5 +1,8 @@
+// the heart of Neon-Cart
+
 import { AuthProvider } from "./contexts/AuthContext";
 import "./App.css";
+import { useState, useEffect } from "react";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import Layout from "./components/layout/layout";
 import Home from "./components/pages/home";
@@ -18,31 +21,63 @@ import PrivateSellerRoute from "./components/seller/sellerRoute";
 import Contact from "./components/pages/contact";
 import About from "./components/pages/about";
 import HelpFAQ from "./components/pages/help";
-import {CartProvider} from "./contexts/CartContext"
+import {CartProvider} from "./contexts/CartContext";
+import {fetchProducts} from "./data/fetchProductData"
+import {IntroAnimation} from "./components/layout/Intro"
+import LoadingSpinner from "./components/common/loading";
+ 
 
 function App() {
+  //cinematic intro logics
+   const [showIntro, setShowIntro] = useState(true);
+   const [initialProducts, setInitialProducts] = useState(null);
+
+    // fetch our products in background while intro runs
+  useEffect(() => {
+    fetchProducts( )
+      .then( products => setInitialProducts(products) )
+
+      .catch(err => console.error("Prefetch failed:", err));
+  }, []);
+
+    if (initialProducts === null) return <LoadingSpinner />;
+
+
+  const handleIntro = () => setShowIntro(false);
+
+   
+
   return (
-    <AuthProvider>
-      <CartProvider>
-      <BrowserRouter>
-        <ScrollToTop />
-        <AppRoutes />
-      </BrowserRouter>
-      </CartProvider>
-    </AuthProvider>
+    <>
+      {showIntro ? (
+        <IntroAnimation onComplete={handleIntro} />
+      ) : (
+        <AuthProvider>
+          <CartProvider>
+            <BrowserRouter>
+              <ScrollToTop />
+              <Layout>
+                <AppRoutes />
+              </Layout>
+            </BrowserRouter>
+          </CartProvider>
+        </AuthProvider>
+      )}
+    </>
   );
 }
 
 function AppRoutes() {
   const location = useLocation();
 
-  const noLayoutPages = ["/login", "/signup", "/sell", "/seller-dashboard", "/buy","/contact","/about","/help", "/seller-apply", "/admin"
+   const noLayoutPages = ["/login", "/signup", "/sell", "/seller-dashboard", "/buy","/contact","/about","/help", "/seller-apply", "/admin"
   ];
 
   const isNoLayout = noLayoutPages.includes(location.pathname);
 
   return (
     <>
+
       {isNoLayout ? (
         <Routes>
           <Route path="/login" element={<Login />} />
@@ -54,7 +89,7 @@ function AppRoutes() {
                 <BuyNow />
               </PrivateRoute>
             }
-          />
+       />
         
         <Route
           path="/sell"
@@ -64,6 +99,7 @@ function AppRoutes() {
             </PrivateSellerRoute>
           }
         />
+
         <Route
           path="/seller-dashboard"
           element={
@@ -87,7 +123,7 @@ function AppRoutes() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/product/:id" element={<ProductDetail />} />
-            <Route path="/products/:category/:subcategory" element={<Products />} />
+            <Route path="/products/:category/:subcategory" element={<Products  />} />
             <Route path="/search" element={<SearchResults />} />
 
           </Routes>

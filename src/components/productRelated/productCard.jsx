@@ -1,3 +1,6 @@
+//  handles UI + interactions for each item in the grid.
+// considering using skeleton loading better UX.
+
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaShoppingCart, FaInfoCircle, FaStar, FaStarHalfAlt } from "react-icons/fa";
@@ -5,8 +8,12 @@ import { getDatabase, ref, onValue } from "firebase/database";
 import styles from "../style/productCard.module.css";
 import { useCartDispatch, addItem } from "../../contexts/CartContext"
 
-export default function ProductCard({ product = {}, onProductSelect }) {
+export default function ProductCard ( { product = { }, onProductSelect } ) {
+
   const navigate = useNavigate();
+
+  // State stuff — handles hover, visibility, expansion.
+ // TODO: This is getting chunky... maybe break out a custom hook later?
   const [reviews, setReviews] = useState([]);
   const [visible, setVisible] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -23,18 +30,24 @@ export default function ProductCard({ product = {}, onProductSelect }) {
     discountPercentage = 0,
   } = product;
 
-  useEffect(() => {
-    if (!id) return;
+  useEffect(( ) => {
+    if ( !id ) return;
+
+    // Grab reviews from Firebase when product ID is available.
+ // Could be memoized or paginated if reviews grow huge.
     const db = getDatabase();
     const reviewsRef = ref(db, `reviews/${id}`);
     const unsubscribe = onValue(reviewsRef, (snapshot) => {
       const data = snapshot.val();
       setReviews(data ? Object.values(data) : []);
-    });
-    return () => unsubscribe();
-  }, [id]);
+    }
+  );
+    return ( ) => unsubscribe( );
+  }, [ id ]);
 
-  useEffect(() => {
+  // NOTE: works nicely but doesn’t handle re-entry scroll.
+// Could wrap this into a reusable hook.
+useEffect(( ) => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -42,15 +55,18 @@ export default function ProductCard({ product = {}, onProductSelect }) {
             setVisible(true);
             observer.unobserve(entry.target);
           }
-        });
+        }
+      );
       },
       { threshold: 0.1 }
     );
+
     if (cardRef.current) observer.observe(cardRef.current);
     return () => observer.disconnect();
   }, []);
 
-  // Calculate average rating
+  // calculate average rating
+  // Might move to utils if reused elsewhere.
   const averageRating =
     reviews.length > 0
       ? reviews.reduce((acc, r) => acc + (r.rating || 0), 0) / reviews.length
@@ -58,34 +74,45 @@ export default function ProductCard({ product = {}, onProductSelect }) {
 
   const totalStars = 5;
   const stars = Array.from({ length: totalStars }, (_, i) => {
+
     const starNumber = i + 1;
+
     if (averageRating >= starNumber) {
-      return <FaStar key={i} className={styles.starFilled} size={14} />;
+
+      return <FaStar key={i} className={styles.starFilled} size={14} />
+
     } else if (averageRating >= starNumber - 0.5) {
-      return <FaStarHalfAlt key={i} className={styles.starFilled} size={14} />;
+
+      return <FaStarHalfAlt key={i} className={styles.starFilled} size={14} />
+
     } else {
-      return <FaStar key={i} className={styles.starEmpty} size={14} />;
+
+      return <FaStar key={i} className={styles.starEmpty} size={14} />
     }
   });
 
-  const handleCardClick = () => {
-    if (onProductSelect) onProductSelect(product);
-    navigate(`/product/${id}`, { state: { product } });
+  // TODO:should we debounce this? Fast clickers beware.
+  const handleCardClick = ( ) => {
+
+    if ( onProductSelect ) onProductSelect (product)
+    navigate(`/product/${id}`, { state: { product } })
   };
 
   const handleExpand = (e) => {
-    e.stopPropagation();
-    setExpanded((p) => !p);
+    e.stopPropagation( )
+    setExpanded((p) => !p)
   };
 
 
 
   const handleCartClick = (e) => {
-    e.stopPropagation();
-    dispatch(addItem({ id, title, price: Number(price), imageUrl }));
+    e.stopPropagation()
+    dispatch(addItem({ id, title, price: Number(price), imageUrl } ) )
   };
 
   return (
+
+    // NOTE: for animations css doing heavy lifting , keep JS light.
     <article
       ref={cardRef}
       className={`${styles.card} ${visible ? styles.visible : ""} ${expanded ? styles.expanded : ""}`}
@@ -96,7 +123,6 @@ export default function ProductCard({ product = {}, onProductSelect }) {
       role="button"
       aria-label={`View details for ${title}`}
     >
-      {/* Circuit Lines Background */}
       <div className={styles.circuitLines}>
         <div className={styles.circuitLineTop}></div>
         <div className={styles.circuitLineLeft}></div>
@@ -104,10 +130,8 @@ export default function ProductCard({ product = {}, onProductSelect }) {
         <div className={styles.circuitLineRight}></div>
       </div>
 
-      {/* Glow effect overlay */}
       <div className={`${styles.glowOverlay} ${isHovered ? styles.glowActive : ""}`}></div>
 
-      {/* Image Section */}
       <div className={styles.imageContainer}>
         <img 
           src={imageUrl} 
@@ -116,7 +140,6 @@ export default function ProductCard({ product = {}, onProductSelect }) {
           loading="lazy"
         />
         
-        {/* Discount Badge */}
         {discountPercentage > 0 && (
           <div className={styles.discountBadge}>
             <span className={styles.discountText}>
@@ -125,7 +148,6 @@ export default function ProductCard({ product = {}, onProductSelect }) {
           </div>
         )}
 
-        {/* Action Buttons */}
         <div className={`${styles.actionButtons} ${(isHovered || expanded) ? styles.actionsVisible : ""}`}>
           <button
             onClick={handleExpand}
@@ -143,7 +165,6 @@ export default function ProductCard({ product = {}, onProductSelect }) {
           </button>
         </div>
 
-        {/* Shimmer effect */}
         <div className={`${styles.shimmer} ${isHovered ? styles.shimmerActive : ""}`}></div>
       </div>
 
@@ -160,8 +181,9 @@ export default function ProductCard({ product = {}, onProductSelect }) {
           </p>
         </div>
 
-        
-        <div className={styles.ratingContainer}>
+ {/* Might wanna link to full reviews later. */}
+    <div className={styles.ratingContainer}>
+
           <div className={styles.starsContainer}>
             {stars}
           </div>
@@ -171,9 +193,8 @@ export default function ProductCard({ product = {}, onProductSelect }) {
           <span className={styles.reviewCount}>
             ({reviews.length})
           </span>
-        </div>
+      </div>
 
-        {/* Price Section */}
         <div className={styles.priceContainer}>
           <div className={styles.priceInfo}>
             <span className={styles.currentPrice}>
@@ -186,7 +207,6 @@ export default function ProductCard({ product = {}, onProductSelect }) {
             )}
           </div>
           
-          {/* Floating buy button */}
           <button
             onClick={() => navigate("/buy", { state: { product } })}
             className={styles.buyButton}
@@ -195,7 +215,7 @@ export default function ProductCard({ product = {}, onProductSelect }) {
           </button>
         </div>
 
-        {/* Expanded Content */}
+// TODO: pull real description from backend in future?
         <div className={`${styles.expandedContent} ${expanded ? styles.expandedVisible : ""}`}>
           <div className={styles.expandedDetails}>
             <p className={styles.expandedText}>Click the card to get more details about this product...</p>

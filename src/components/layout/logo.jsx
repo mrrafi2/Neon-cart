@@ -12,7 +12,7 @@ const Logo = () => {
           <div className={styles.logoGlow}></div>
           <div className={styles.logoCircuit}></div>
           
-          {/* Animated particles */}
+          {/* animated particles */}
           <div className={styles.particles}>
             <span className={styles.particle}></span>
             <span className={styles.particle}></span>

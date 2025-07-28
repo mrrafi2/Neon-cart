@@ -13,11 +13,10 @@ export default function ProductGrid({ products }) {
   if (!products || products.length === 0) {
     return (
       <div className={styles.emptyState}>
-        {/* Circuit pattern for empty state */}
         <div className={styles.emptyIcon}>
           <div className={styles.emptyIconBorder}></div>
           <div className={styles.emptyIconLines}>
-            <div className={styles.emptyLineTop}></div>
+          <div className={styles.emptyLineTop}></div>
             <div className={styles.emptyLineLeft}></div>
             <div className={styles.emptyLineBottom}></div>
             <div className={styles.emptyLineRight}></div>

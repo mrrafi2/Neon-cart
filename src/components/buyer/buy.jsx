@@ -1,3 +1,5 @@
+//  A compinents to handles the checkout flow: displays cart items or single product, collects shipping info, and sends order via EmailJS. very simple mechanism for my small project
+
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import emailjs from "@emailjs/browser"; 
@@ -21,7 +23,10 @@ export default function BuyNow() {
   const [address, setAddress] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // ramdom imaginary shipping fee, because free shipping feels like a lie sometimes
     const deliveryCharge = 200;
+  
+  // Calculate items total, whether it's a multi-item cart or a single buy-now
   const itemsTotal = cartItems.length
     ? cartItems.reduce((sum, i) => sum + i.price * i.quantity, 0)
     : singleProduct
@@ -30,6 +35,7 @@ export default function BuyNow() {
   const totalPrice = itemsTotal + deliveryCharge;
 
 
+  // Derive dynamic drop-down options from our locationData JSON
   const districts = division ? Object.keys(locationData[division] || {}) : [];
   const areas = division && district ? locationData[division][district] || [] : [];
 
@@ -42,15 +48,18 @@ export default function BuyNow() {
     setArea("");
   }, [district]);
 
+
+    // submit handler: validate, assemble payload, dispatch EmailJS, handle UI feedback
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!fullName || !email || !phone || !division || !district || !area || !address) {
+    if ( !fullName || !email || !phone || !division || !district || !area || !address ) {
       alert("Please fill in all required fields.");
       return;
     }
 
     setLoading(true); 
+
 
  const orderItems = cartItems.length
       ? cartItems.map((i) => ({
@@ -76,17 +85,18 @@ export default function BuyNow() {
       district,
       area,
       address,
-      items: JSON.stringify(orderItems), 
+      items: JSON.stringify(orderItems), // stringified because EmailJS loves text blobs
       itemsTotal,
       deliveryCharge,
       totalPrice,
     };
 
-
+ 
+    // Send order details via EmailJS for excperiment
     try {
       await emailjs.send(
-        "service_u9fpnm2", //EmailJS service ID
-        "template_zjpfw2z", //  EmailJS template ID
+        "service_u9fpnm2", 
+        "template_zjpfw2z", 
         orderDetails,
         "8TxyKYmHmMLYLV52E" // EmailJS public key
       );
@@ -99,10 +109,11 @@ export default function BuyNow() {
       console.error("Failed to send order email:", error);
       alert("Something went wrong! Please try again.");
     } finally {
-      setLoading(false); // Hide loading animation
+      setLoading(false);
     }
   };
 
+    // clear the form so the ghosts of past orders don't haunt us
   const resetForm = () => {
     setFullName("");
     setEmail("");
@@ -113,7 +124,7 @@ export default function BuyNow() {
     setAddress("");
   };
 
-  if (!cartItems.length && !singleProduct) {
+  if ( !cartItems.length && !singleProduct) {
     return (
       <div className={styles.buyContainer}>
         <div className={styles.emptyState}>
@@ -133,6 +144,8 @@ export default function BuyNow() {
 
   return (
     <div className={styles.buyContainer}>
+
+        {/* Page headline with sci-fi vibes */}
       <div className={styles.header}>
         <h1 className={styles.heading}>Review Your Order</h1>
         <div className={styles.headerLine}></div>
@@ -148,8 +161,10 @@ export default function BuyNow() {
                 </svg>
               </span>
               Order Summary
-            </h2>
-            {cartItems.length > 0 ? (
+        </h2>
+
+      {/* render cart items or single product summary */}
+          {cartItems.length > 0 ? (
               <div className={styles.cartList}>
                 {cartItems.map((item, index) => (
                   <div key={item.id} className={styles.cartListItem} style={{ '--item-index': index }}>
@@ -174,6 +189,7 @@ export default function BuyNow() {
                   </div>
                 ))}
               </div>
+
             ) : (
               <div className={styles.cartListItem}>
                 <div className={styles.productImageWrapper}>
@@ -195,6 +211,7 @@ export default function BuyNow() {
             )}
           </div>
 
+          {/* Buyer & Delivery form start */}
           <form onSubmit={handleSubmit} className={styles.buyForm}>
             <div className={styles.formSection}>
               <h3 className={styles.formSectionTitle}>
@@ -322,6 +339,7 @@ export default function BuyNow() {
           </form>
         </div>
 
+{/* right side (bottom for small screens) price summary & place order */}
         <div className={styles.rightSection}>
           <div className={styles.priceSummary}>
             <h3 className={styles.summaryTitle}>Order Total</h3>
@@ -365,6 +383,7 @@ export default function BuyNow() {
   );
 }
 
+// Minimal loader  because a blank screen is for amateurs
 const LoadingSpinner = () => {
   return (
     <div className={styles.loaderContainer}>

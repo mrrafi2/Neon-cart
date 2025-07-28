@@ -1,3 +1,5 @@
+// the simple main footer of the site
+
 import React from "react";
 import styles from "../style/footer.module.css";
 import { FaFacebook, FaTwitter, FaInstagram, FaYoutube } from "react-icons/fa";
@@ -7,7 +9,6 @@ export default function Footer() {
   return (
     <footer className={styles.footerContainer}>
       <div className={styles.footerContent}>
-        {/* Column 1: About */}
         <div className={styles.footerColumn}>
           <h3>Company</h3>
           <ul>
@@ -18,7 +19,6 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Column 2: Customer Support */}
         <div className={styles.footerColumn}>
           <h3>Customer Support</h3>
           <ul>
@@ -29,7 +29,6 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Column 3: Social Links */}
         <div className={styles.footerColumn}>
           <h3>Stay Connected</h3>
           <div className={styles.socialIcons}>

@@ -1,3 +1,5 @@
+// like a shop it handles multi-step product listing with image upload and metadata
+
 import React, { useState, useEffect } from "react";
 import { ref, push, set } from "firebase/database";
 import { db } from "../../firebaseInit/firebase";
@@ -10,6 +12,7 @@ import styles from "../style/sell.module.css";
 export default function Sell() {
   const { currentUser } = useAuth();
   const [step, setStep] = useState(1);
+
   const [category, setCategory] = useState("");
   const [subcategory, setSubcategory] = useState("");
   const { categories, dynamicFields } = productMeta;
@@ -17,17 +20,22 @@ export default function Sell() {
   const [brand, setBrand] = useState("");
   const [title, setTitle] = useState("");
   const [type, setType] = useState("");
+
   const [dynamicValues, setDynamicValues] = useState({});
   const [description, setDescription] = useState("");
+
   const [price, setPrice] = useState("");
+
   const [condition, setCondition] = useState("New");
   const [usedDuration, setUsedDuration] = useState("");
+
   const [productImage, setProductImage] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-
+// drag-n-drop setup
   const {
     getRootProps,
     getInputProps,
@@ -50,40 +58,48 @@ export default function Sell() {
 
 
   const handleCategoryChange = (e) => {
-    setCategory(e.target.value);
-    setSubcategory("");
-    setDynamicValues({});
+    setCategory(e.target.value)
+    setSubcategory("")
+    setDynamicValues({ });
   };
 
   const handleSubcategoryChange = (e) => {
-    setSubcategory(e.target.value);
-    setDynamicValues({});
+    setSubcategory(e.target.value)
+    setDynamicValues({})
+
   };
 
+    // first form submit moves to details step
   const handleStep1Submit = (e) => {
-    e.preventDefault();
+    e.preventDefault ();
     if (!category || !subcategory) {
-      alert("Please select both category and subcategory.");
-      return;
+      alert("Please select both category and subcategory.")
+      return
     }
-    setStep(2);
+    setStep(2)
   };
 
+    // final submit uploads image then data
   const handleFinalSubmit = async (e) => {
-    console.log("Submitting...");
-    e.preventDefault();
-    if (!brand || !title || !type) {
+    console.log("Submitting...")
+    e.preventDefault( )
+
+      // TODO: add form validation for all required fields
+    if ( !brand || !title || !type ) {
       alert("Please fill out the required fields (brand, title, type).");
-      return;
+      return
     }
-    if (!price) {
+
+    if ( !price ) {
       alert("Please enter a price.");
       return;
     }
+
     if (condition === "Used" && !usedDuration) {
       alert("Please specify the age of the used product.");
       return;
     }
+
     if (!productImage) {
       alert("Please upload a product image.");
       return;
@@ -102,9 +118,12 @@ export default function Sell() {
         }
       );
       const cloudinaryData = await cloudinaryRes.json();
-      const imageUrl = cloudinaryData.secure_url;
-      console.log("Image uploaded to:", imageUrl);
-      console.log("Cloudinary response:", cloudinaryData);
+
+      const imageUrl = cloudinaryData.secure_url;  // url for db
+
+      console.log("Image uploaded to:", imageUrl)
+
+      console.log("Cloudinary response:", cloudinaryData)
 
       const productData = {
         category,
@@ -121,6 +140,7 @@ export default function Sell() {
         createdAt: new Date().toISOString(),
         userId: currentUser?.uid,
       };
+
       console.log("Final product data:", productData);
 
       const productsRef = ref(db, "products");
@@ -163,7 +183,7 @@ export default function Sell() {
     setDynamicValues((prev) => ({ ...prev, [fieldName]: value }));
   };
 
-  // Render Step 1
+  // render Step 1
   const renderStep1 = () => (
     <div className={styles.stepContainer}>
       <div className={styles.stepHeader}>
@@ -233,7 +253,7 @@ export default function Sell() {
     </div>
   );
 
-  // Render Step 2
+  // render Step 2
   const renderStep2 = () => (
     <div className={styles.stepContainer}>
       <div className={styles.stepHeader}>
@@ -247,7 +267,6 @@ export default function Sell() {
       </div>
 
       <form onSubmit={handleFinalSubmit} className={styles.sellForm}>
-        {/* Basic Information Section */}
         <div className={styles.formSection}>
           <h3 className={styles.sectionTitle}>Basic Information</h3>
           
@@ -299,8 +318,8 @@ export default function Sell() {
             <span className={styles.helpText}>Keep it concise and short</span>
           </div>
         </div>
-
-        {/* Specifications Section */}
+  
+   {/* specification */}
         {subcategoryFields.length > 0 && (
           <div className={styles.formSection}>
             <h3 className={styles.sectionTitle}>Specifications</h3>
@@ -321,7 +340,7 @@ export default function Sell() {
           </div>
         )}
 
-        {/* Product Image Section */}
+        {/*  Image  */}
         <div className={styles.formSection}>
           <h3 className={styles.sectionTitle}>Product Image</h3>
           <div className={styles.formGroup}>
@@ -373,7 +392,7 @@ export default function Sell() {
           </div>
         </div>
 
-        {/* Pricing & Condition Section */}
+        {/* pricing & condition  */}
         <div className={styles.formSection}>
           <h3 className={styles.sectionTitle}>Pricing & Condition</h3>
           
@@ -505,7 +524,7 @@ export default function Sell() {
         {step === 1 ? renderStep1() : renderStep2()}
       </div>
 
-      {/* Success Modal */}
+      {/* success modal */}
       {showSuccessModal && (
         <div className={styles.modalOverlay}>
           <div className={styles.successModal}>

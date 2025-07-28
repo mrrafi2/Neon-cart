@@ -1,3 +1,6 @@
+// this is the site-wide top navigation bar. Handles features like help, About, Contact, Notifications,
+// and dynamic seller actions (e.g., Sell, Become a Seller) depending on user state.
+
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { 
@@ -19,6 +22,7 @@ import styles from "../style/topNav.module.css";
 
 
 export default function TopNav() {
+
   const { currentUser, isSeller } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -26,27 +30,20 @@ export default function TopNav() {
   const [showMobileNav, setShowMobileNav] = useState(false);
   const [showSellOverlay, setShowSellOverlay] = useState(false);
 
-  const hiddenRoutes = ["/seller-apply"];
-  if (hiddenRoutes.includes(location.pathname)) return null;
-
-
-  const navItems = [
-    { icon: <FaQuestionCircle size={15} />, label: "Help", link: "/help" },
-    { icon: <FaPhone size={15} />, label: "Contact", link: "/contact" },
-     { icon: <FaBell   size={15} />, label: "Notifications", link: "/"},
-    { icon: <FaInfoCircle size={15} />, label: "About", link: "/about" },
-  ];
+  
 
   const handleSellClick = () => {
     setShowSellOverlay(true);
   };
 
+    //  could be moved to AuthContext to avoid repeating seller logic in every component
    const sellerRef = currentUser
   ? ref(db, `users/${currentUser.uid}/seller`)
-  : null;
+  : null
+
 const [sellerData] = useObjectVal(sellerRef);
 
-
+  //  Show overlay then redirect after a short delay
   useEffect(() => {
     let timer;
     if (showSellOverlay) {
@@ -63,6 +60,19 @@ const [sellerData] = useObjectVal(sellerRef);
    : null;
 
 
+   //  don't show nav on certain pages
+  const hiddenRoutes = ["/seller-apply"];
+  if (hiddenRoutes.includes(location.pathname)) return null;
+
+
+  const navItems = [
+    { icon: <FaQuestionCircle size={15} />, label: "Help", link: "/help" },
+    { icon: <FaPhone size={15} />, label: "Contact", link: "/contact" },
+     { icon: <FaBell   size={15} />, label: "Notifications", link: "/"},
+    { icon: <FaInfoCircle size={15} />, label: "About", link: "/about" },
+  ];
+
+
   return (
     <>
        <>
@@ -72,7 +82,7 @@ const [sellerData] = useObjectVal(sellerRef);
 
         {currentUser ? (
           sellerData?.profile?.businessName && sellerData?.profile?.address && sellerData?.profile?.taxId ?  (
-            <>
+        <>
               <Link to="/seller-dashboard" className={styles.sellLink}>
                 <FaStore />
               </Link>

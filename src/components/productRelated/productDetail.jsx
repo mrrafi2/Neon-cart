@@ -1,3 +1,10 @@
+// shows full product info and handle rating and reviews
+// also handle buy now/add to cart action
+// also shows related products at bottom
+// NOTE: this component is beefy. Might need splitting into subcomponents soon.
+// TODO: consider server-side rendering or caching for faster initial load.
+
+
 import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { FaStar, FaHeart, FaTrash, FaStarHalfAlt, FaShoppingCart } from "react-icons/fa";
@@ -14,17 +21,7 @@ export default function ProductDetail() {
   const navigate = useNavigate();
   const dispatch = useCartDispatch(); 
 
-  if (!product || !product.id) {
-    return (
-      <div className={styles.notFound}>
-        <div className={styles.notFoundContent}>
-          <h2>Product not found</h2>
-          <p>The product you're looking for doesn't exist.</p>
-        </div>
-      </div>
-    );
-  }
-
+  
   const [userRating, setUserRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
@@ -145,9 +142,9 @@ export default function ProductDetail() {
   const inStock = product.stock !== undefined ? product.stock > 0 : true;
 
   const handleBuyNowClick = () => {
-    if (!inStock) return;
+    if (!inStock ) return;
     setShowBuyOverlay(true);
-  };
+  }
 
   useEffect(() => {
     let timer;
@@ -158,7 +155,20 @@ export default function ProductDetail() {
       }, 3000);
     }
     return () => clearTimeout(timer);
-  }, [showBuyOverlay, navigate, product]);
+  }, [showBuyOverlay, navigate, product]
+)
+
+  if ( !product || !product.id ) {
+    return (
+      <div className={styles.notFound}>
+        <div className={styles.notFoundContent}>
+          <h2>Product not found</h2>
+          <p>The product you're looking for doesn't exist.</p>
+        </div>
+      </div>
+    );
+  }
+
 
   const averageRating =
     reviews.length > 0
@@ -252,6 +262,7 @@ export default function ProductDetail() {
               )}
             </div>
           </div>
+
 
           <div className={styles.actionSection}>
             <button

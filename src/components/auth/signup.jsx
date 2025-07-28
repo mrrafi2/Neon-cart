@@ -1,3 +1,5 @@
+// you all know why this component for....
+
 import { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext"; 
 import { useNavigate } from "react-router-dom";
@@ -58,7 +60,7 @@ export default function Signup() {
       {error && <p className={styles.error}>{error}</p>}
       
       <form onSubmit={handleSubmit}>
-        {/* Username */}
+        
         <input 
           type="text" 
           name="username" 
@@ -70,7 +72,7 @@ export default function Signup() {
         <br />
         <br />
 
-        {/* Email */}
+        
         <input 
           type="email" 
           name="email" 
@@ -83,7 +85,6 @@ export default function Signup() {
         <br />
         <br />
 
-        {/* Password with toggle */}
         <div className={styles.passwordWrapper}>
           <input 
             type={passwordVisible ? "text" : "password"} 
@@ -101,7 +102,6 @@ export default function Signup() {
         
         <br />
 
-        {/* Confirm Password */}
         <div className={styles.passwordWrapper}>
           <input 
             type={confirmPasswordVisible ? "text" : "password"} 
@@ -118,7 +118,6 @@ export default function Signup() {
          
          <br />
 
-        {/* Phone Number */}
         <input 
           type="tel" 
           name="phoneNumber" 
@@ -130,7 +129,6 @@ export default function Signup() {
         <br />
         <br />
 
-        {/* Gender */}
         <div className={styles.genderContainer}>
           <label>
             <input 
@@ -170,7 +168,6 @@ export default function Signup() {
 
        <br />
        
-        {/* Submit Button */}
         <button type="submit" className={styles.signupButton}>
           Create Account
         </button>

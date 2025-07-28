@@ -1,28 +1,34 @@
-import React, { useState, useEffect } from "react";
+//Renders product listings with sorting, filtering, pagination, and category offcanvas.
+// TODO: consider breaking into multiple component and server-side filtering and pagination for large catalogs.
+// TIP: debounce search input to reduce unnecessary re-renders.
+
+import React, { useState, useEffect, useRef } from "react";
 import ProductGrid from "./productGrid";
 import Category from "./category";
 import { getDatabase, ref, get } from "firebase/database";
 import { useParams } from "react-router-dom";
+import {fetchProducts as fetchAllProducts} from "../../data/fetchProductData"
 import LoadingSpinner from "../common/loading";
 import SearchBar from "../search/search";
 import styles from "../style/products.module.css";
 
-export default function Products() {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+export default function Products ({ initialProducts }) {
+
+  const [products, setProducts] = useState(initialProducts || []);
+  const [loading, setLoading] = useState(!initialProducts);
   const [conditionFilter, setConditionFilter] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
   const [showCategoryOffcanvas, setShowCategoryOffcanvas] = useState(false);
-  const [loadingMore, setLoadingMore] = useState(false); 
-  const [filters, setFilters] = useState([]); 
-  const [sortBy, setSortBy] = useState("rating"); 
-  const [viewMode, setViewMode] = useState("grid"); 
-  const [quickViewProduct, setQuickViewProduct] = useState(null); 
+   const [sortBy, setSortBy] = useState("newest");
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [showScroll, setShowScroll] = useState(false);
+  const scrollContainer = useRef(null);
 
   const pageSize = 18;
 
   const { category, subcategory } = useParams();
 
+    // compute product rating on demand
   const fetchAverageRating = async (productId) => {
     const db = getDatabase();
     const reviewsRef = ref(db, `reviews/${productId}`);
@@ -41,46 +47,34 @@ export default function Products() {
     return 0;
   };
 
-  const fetchProducts = async () => {
-    const db = getDatabase();
-    const productsRef = ref(db, "products");
+  // fetch all products + enrich with ratings & counts
+  const fetchProducts = async ( ) => {
     try {
-      const snapshot = await get(productsRef);
-      if (snapshot.exists()) {
-        const data = snapshot.val();
-        let productsArray = Object.keys(data).map((key) => ({
-          id: key,
-          ...data[key],
-        }));
+      let all = await fetchAllProducts();
 
-        if (category && subcategory) {
-          productsArray = productsArray.filter(
-            (product) =>
-              product.category === category && product.subcategory === subcategory
-          );
-        }
-
-        const productsWithRatings = await Promise.all(
-          productsArray.map(async (prod) => {
-            const avgRating = await fetchAverageRating(prod.id);
-            return { ...prod, rating: avgRating };
-          })
-        );
-
-        productsWithRatings.sort((a, b) => (b.rating || 0) - (a.rating || 0));
-        setProducts(productsWithRatings);
-      } else {
-        console.log("No products available.");
-        setProducts([]);
-      }
-    } catch (error) {
-      console.error("Error fetching products:", error);
+      if (category && subcategory) {
+        all = all.filter(p => p.category === category && p.subcategory === subcategory);
+     }
+     const db = getDatabase();
+     const enriched = await Promise.all(
+       all.map (async (p) => {
+         const avg = await fetchAverageRating(p.id);
+         const snap = await get(ref(db, `reviews/${p.id}`));
+         const count = snap.exists() ? Object.values(snap.val()).length : 0;
+          return { ...p, rating: avg, reviewCount: count };
+        } )
+      );
+      setProducts(enriched);
+    } catch (err) {
+      console.error("Failed to load products:", err);
+      setProducts([]);
     } finally {
       setLoading(false);
     }
-  };
+  }
 
-  useEffect(() => {
+
+  useEffect(( ) => {
     fetchProducts();
   }, [category, subcategory]);
 
@@ -92,7 +86,18 @@ export default function Products() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [currentPage]);
 
+  useEffect(() => {
+    const onScroll = () => {
+      if (window.pageYOffset > 300) setShowScroll(true);
+      else setShowScroll(false);
+    };
+
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
  if (loading) {
+
     return (
       <div className={styles.loadingContainer}>
         <div className={styles.loadingContent}>
@@ -103,31 +108,55 @@ export default function Products() {
     );
   }
 
-  let filteredProducts = products;
-  if (conditionFilter === "New") {
-    filteredProducts = products.filter((p) => p.condition === "New");
-  } else if (conditionFilter === "Used") {
-    filteredProducts = products.filter((p) => p.condition === "Used");
+  let displayed = [...products];
+  switch (sortBy) {
+
+    case "newest":
+      displayed.sort( (a,b) => new Date(b.createdAt) - new Date(a.createdAt) );
+
+      break;
+
+    case "popular":
+
+      displayed.sort( (a,b) => (b.rating||0)*(b.reviewCount||0) - (a.rating||0)*(a.reviewCount||0)) ;
+
+      break;
+
+    case "priceLow":
+      displayed.sort( (a,b) => a.price - b.price );
+
+      break;
+
+    case "priceHigh":
+      displayed.sort( (a,b) => b.price - a.price );
+
+      break;
+
+    case "used":
+      displayed = displayed.filter( p => p.condition === "Used" );
+
+      break;
+
+    default:
+      break;
   }
 
-  const totalProducts = filteredProducts.length;
-  const totalPages = Math.ceil(totalProducts / pageSize);
-  const validCurrentPage = Math.min(currentPage, totalPages || 1);
-  const startIndex = (validCurrentPage - 1) * pageSize;
-  const endIndex = startIndex + pageSize;
-  const paginatedProducts = filteredProducts.slice(startIndex, endIndex);
 
-  const handlePageChange = (page) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
-    }
-  };
+  const totalProducts = displayed.length
+const totalPages    = Math.ceil(totalProducts / pageSize)
+ const validPage     = Math.min(currentPage, totalPages || 1);
+const startIndex    = (validPage - 1) * pageSize
+const endIndex      = startIndex + pageSize
 
-  const filterOptions = [
-    { value: "All", label: "All Products", count: products.length },
-    { value: "New", label: "New", count: products.filter(p => p.condition === "New").length },
-    { value: "Used", label: "Used", count: products.filter(p => p.condition === "Used").length }
-  ];
+const paginatedProducts = displayed.slice(startIndex, endIndex) 
+
+const handlePageChange = (page) => {
+  if (page >= 1 && page <= totalPages) {
+    setCurrentPage(page)
+  }
+};
+
+  
 
   return (
     <div className={styles.productsContainer}>
@@ -153,7 +182,7 @@ export default function Products() {
         <div className={styles.offcanvasContent}>
           <div className={styles.offcanvasHeader}>
             <h2 className={styles.offcanvasTitle}>Browse Categories</h2>
-            <button 
+            <button p
               className={styles.offcanvasClose}
               onClick={() => setShowCategoryOffcanvas(false)}
               aria-label="Close categories"
@@ -184,7 +213,7 @@ export default function Products() {
           <div className={styles.headerStats}>
             <span>Total: {totalProducts} products</span>
             <div className={styles.statsDivider}></div>
-            <span>Page {validCurrentPage} of {totalPages || 1}</span>
+              <span>Page {validPage} of {totalPages || 1}</span>
           </div>
         </div>
            {/* Search Row */}
@@ -193,30 +222,58 @@ export default function Products() {
                             <SearchBar />
                         </div>
                     </div>
-        {/* Filter Tabs */}
-        <div className={styles.tabContainer}>
-          {filterOptions.map((option) => (
-            <button
-              key={option.value}
-              onClick={() => setConditionFilter(option.value)}
-              className={`${styles.tabButton} ${conditionFilter === option.value ? styles.tabActive : ''}`}
-            >
-              {/* Circuit decorations */}
-              <div className={styles.circuitCornerTopLeft}></div>
-              <div className={styles.circuitCornerBottomRight}></div>
+        
+        <div className={styles.sortContainer}>
+        <button
+          className={styles.sortToggle}
+          onClick={() => setDropdownOpen(o => !o)}
+        >
+          Sort: {(() => {
+            const map = {
+              newest: "Newest",
+              popular: "Popular",
+              priceLow: "Price ↑",
+              priceHigh: "Price ↓",
+              used: "Used Only"
+            };
+            return map[sortBy];
+          })()}
+          <span className={styles.arrow}>{dropdownOpen ? "▲" : "▼"}</span>
+        </button>
+        {dropdownOpen && (
+          <ul className={styles.sortMenu}>
+            {[
+              ["newest","Newest"],
+              ["popular","Popular"],
+              ["priceLow","Price: Low→High"],
+              ["priceHigh","Price: High→Low"],
+              ["used","Used Only"]
+            ].map(([value,label]) => (
+              <li key={value}>
+                <button
+                  className={styles.sortItem}
+                  onClick={() => {
+                    setSortBy(value);
+                    setDropdownOpen(false);
+                  }}
+                >
+                  {label}
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
 
-              <span className={styles.tabContent}>
-                {option.label}
-                <span className={styles.tabBadge}>
-                  {option.count}
-                </span>
-              </span>
-
-              {/* Hover effect */}
-              <div className={styles.tabHoverEffect}></div>
-            </button>
-          ))}
-        </div>
+      {showScroll && (
+        <button
+          className={styles.scrollTop}
+          onClick={() => window.scrollTo({ top:0, behavior:"smooth" })}
+          aria-label="Scroll to top"
+        >
+          ↑
+        </button>
+      )}
 
         {/* Product Grid */}
         <div className={styles.gridSection}>
@@ -246,15 +303,18 @@ export default function Products() {
         {totalPages > 1 && (
           <div className={styles.paginationContainer}>
             <nav className={styles.pagination} aria-label="Pagination">
-              {/* Previous Button */}
+
+                {/* Previous Button */}
               <button
-                onClick={() => handlePageChange(validCurrentPage - 1)}
-                disabled={validCurrentPage === 1}
-                className={`${styles.paginationButton} ${validCurrentPage === 1 ? styles.paginationDisabled : ''}`}
-                aria-label="Previous page"
-              >
-                ← Prev
-              </button>
+               onClick={() => handlePageChange(validPage - 1)}
+               disabled={validPage === 1}
+               className={`${styles.paginationButton} ${
+                 validPage === 1 ? styles.paginationDisabled : ""
+               }`}
+               aria-label="Previous page"
+             >
+               ← Prev
+             </button>
 
               {/* Page Numbers */}
               <div className={styles.pageNumber}>
@@ -263,12 +323,12 @@ export default function Products() {
                   if (totalPages <= 7) {
                     pageNumber = i + 1;
                   } else {
-                    if (validCurrentPage <= 4) {
+                    if (validPage <= 4) {
                       pageNumber = i + 1;
-                    } else if (validCurrentPage >= totalPages - 3) {
+                    } else if (validPage >= totalPages - 3) {
                       pageNumber = totalPages - 6 + i;
                     } else {
-                      pageNumber = validCurrentPage - 3 + i;
+                      pageNumber = validPage - 3 + i;
                     }
                   }
 
@@ -276,11 +336,11 @@ export default function Products() {
                     <button
                       key={pageNumber}
                       onClick={() => handlePageChange(pageNumber)}
-                      className={`${styles.pageButton} ${pageNumber === validCurrentPage ? styles.pageActive : ''}`}
+                      className={`${styles.pageButton} ${pageNumber === validPage ? styles.pageActive : ''}`}
                       aria-label={`Go to page ${pageNumber}`}
-                      aria-current={pageNumber === validCurrentPage ? "page" : undefined}
+                      aria-current={pageNumber === validPage ? "page" : undefined}
                     >
-                      {pageNumber === validCurrentPage && (
+                      {pageNumber === validPage && (
                         <div className={styles.pageActiveCorner}></div>
                       )}
                       {pageNumber}
@@ -291,9 +351,9 @@ export default function Products() {
 
               {/* Next Button */}
               <button
-                onClick={() => handlePageChange(validCurrentPage + 1)}
-                disabled={validCurrentPage === totalPages}
-                className={`${styles.paginationButton} ${validCurrentPage === totalPages ? styles.paginationDisabled : ''}`}
+                onClick={() => handlePageChange(validPage + 1)}
+                disabled={validPage === totalPages}
+                className={`${styles.paginationButton} ${validPage === totalPages ? styles.paginationDisabled : ''}`}
                 aria-label="Next page"
               >
                 Next →

@@ -1,3 +1,5 @@
+//The glorious neon shopping cart markup
+
 import React, { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";      
 import { FaShoppingCart, FaTrash, FaPlus, FaMinus } from "react-icons/fa";
@@ -11,44 +13,50 @@ import {
 import styles from "../style/cart.module.css";
 
 export default function CartDropdown() {
+
+   // Grab cart items, dispatch magic from context
   const cart = useCart();
   const dispatch = useCartDispatch();
+
   const [open, setOpen] = useState(false);
   const [animatingItems, setAnimatingItems] = useState(new Set());
   const wrapperRef = useRef();
   const navigate = useNavigate();
 
-  useEffect(() => {
+  //  close the cart if user click anywhere else
+  useEffect( ( ) => {
     function handleClick(e) {
-      if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
+      if ( wrapperRef.current && !wrapperRef.current.contains( e.target ) ) {
         setOpen(false);
       }
     }
     document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
-  }, []);
+    return ( ) => document.removeEventListener("mousedown", handleClick);
+  }, [ ] );
 
-  const handleQuantityChange = (itemId, newQty) => {
-    if (newQty <= 0) {
-      handleRemoveItem(itemId);
+   // Called when user taps +/-; animate then update qty or remove
+  const handleQuantityChange= ( itemId, newQty ) => {
+    if ( newQty <= 0 ) {
+      handleRemoveItem( itemId );
       return;
     }
-    setAnimatingItems(prev => new Set([...prev, itemId]));
-    dispatch(updateQty(itemId, newQty));
-    setTimeout(() => {
-      setAnimatingItems(prev => {
-        const newSet = new Set(prev);
-        newSet.delete(itemId);
+    setAnimatingItems( prev => new Set ( [...prev, itemId] ) );
+    dispatch( updateQty(itemId, newQty ) );
+    setTimeout (( ) => {
+      setAnimatingItems( prev => {
+        const newSet = new Set (prev);
+        newSet.delete( itemId );
         return newSet;
-      });
-    }, 300);
+      } );
+    }, 300);  // 300ms to let the CSS wiggle finish
   };
 
-  const handleRemoveItem = (itemId) => {
-    setAnimatingItems(prev => new Set([...prev, itemId]));
-    setTimeout(() => {
-      dispatch(removeItem(itemId));
-      setAnimatingItems(prev => {
+    // Remove item with a little effect/drama
+  const handleRemoveItem= ( itemId ) => {
+    setAnimatingItems ( prev => new Set ( [...prev, itemId] ));
+    setTimeout( ( ) => {
+      dispatch( removeItem( itemId ));
+      setAnimatingItems( prev => {
         const newSet = new Set(prev);
         newSet.delete(itemId);
         return newSet;
@@ -64,7 +72,7 @@ export default function CartDropdown() {
 
   const dropdownJSX = (
     <div ref={wrapperRef} className={styles.portalWrapper}>
-      {/* Cart Icon Button */}
+      
       <button
         className={styles.iconButton}
         onClick={() => setOpen(v => !v)}
@@ -74,7 +82,7 @@ export default function CartDropdown() {
           <FaShoppingCart size={20} />
           <div className={styles.iconGlow}></div>
           
-          {/* Animated particles around cart */}
+          {/* animated particles around cart for attractive ui */}
           <div className={styles.particles}>
             <span className={styles.particle}></span>
             <span className={styles.particle}></span>
@@ -82,7 +90,7 @@ export default function CartDropdown() {
           </div>
         </div>
         
-        {totalItems > 0 && (
+        { totalItems > 0 && (
           <span className={styles.badge}>
             {totalItems}
             <div className={styles.badgePulse}></div>
@@ -99,6 +107,7 @@ export default function CartDropdown() {
           </div>
 
           {cart.length === 0 ? (
+          // 🕳️ empty state-sad cart vibes
             <div className={styles.emptyState}>
               <div className={styles.emptyIcon}>
                 <FaShoppingCart size={40} />
@@ -156,16 +165,17 @@ export default function CartDropdown() {
                     </button>
                   </li>
                 ))}
-              </ul>
-
+          </ul>
+        
+        {/*  footer with totals and checkout */}
               <div className={styles.footer}>
-                <div className={styles.totalSection}>
-                  <span className={styles.totalLabel}>Total:</span>
+              <div className={styles.totalSection}>
+                <span className={styles.totalLabel}>Total:</span>
                   <span className={styles.totalPrice}>৳{totalPrice.toFixed(2)}</span>
                   <div className={styles.totalGlow}></div>
                 </div>
                 
-                <button 
+              <button 
                   className={styles.checkoutButton}
                   onClick={() => {
                     setOpen(false);
@@ -175,13 +185,15 @@ export default function CartDropdown() {
                   <span>Checkout</span>
                   <div className={styles.checkoutGlow}></div>
                 </button>
-              </div>
+          </div>
             </>
-          )}
+          ) }
         </div>
-      )}
+      ) }
     </div>
+
   );
 
   return createPortal(dropdownJSX, portalRoot);
+  
 }

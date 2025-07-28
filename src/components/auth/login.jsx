@@ -1,3 +1,5 @@
+// you all know why this component for....
+
 import React, { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa";
@@ -8,7 +10,6 @@ import styles from "../style/login.module.css";
 export default function Login() {
   const { login, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
-
   const [email, setEmail]  = useState("");
   const [password, setPassword]   = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -24,7 +25,7 @@ export default function Login() {
       navigate("/");
     } catch (err) {
       console.error(err);
-      setError("⚠️ Failed to login. Please check your credentials.");
+      setError("⚠️ Failed to login. Please recheck your Email and password.");
     } finally {
       setLoading(false);
     }

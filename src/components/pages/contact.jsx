@@ -1,3 +1,5 @@
+// contact form
+
 import { useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
 
@@ -10,12 +12,13 @@ export default function Contact() {
     e.preventDefault();
     setLoading(true);
 
+    // send email using emailJS- setup
     emailjs
       .sendForm(
-        "service_kefi9ql",   // EmailJS Service ID
-        "template_9cso8ed",  // EmailJS Template ID
+        "service_kefi9ql", 
+        "template_9cso8ed",  
         formRef.current,
-        "VE2iSZYr85KvBwxB1"   // EmailJS Public Key
+        "VE2iSZYr85KvBwxB1"   
       )
       .then(
         (result) => {

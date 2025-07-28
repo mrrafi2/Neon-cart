@@ -1,26 +1,86 @@
 .spinnerContainer {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     min-height: 80vh;
-  }
-  
-  .spinner {
-    width: 50px;
-    height: 50px;
-    border: 6px solid rgba(0, 255, 255, 0.2); /* Transparent cyan border */
-    border-top: 8px solid #00ffff; /* Cyan border on top */
+    position: relative;
+    overflow: hidden;
+}
+
+.spinner {
+    position: relative;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
+    background: radial-gradient(circle at 60% 40%, #00ffff 0%, #7f00ff 80%, transparent 100%);
+    box-shadow:
+        0 0 40px 10px #00ffffa0,
+        0 0 80px 20px #7f00ffaa,
+        0 0 0 0 #fff;
+    animation: spinner-glow 2s ease-in-out infinite;
+    z-index: 1;
+}
+
+.spinner::before, .spinner::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    box-sizing: border-box;
+}
+
+.spinner::before {
+    top: -10px; left: -10px; right: -10px; bottom: -10px;
+    border: 8px solid #00ffff70;
+    border-top: 10px solid #7f00ff;
+    border-left: 10px solid #ff00cc;
     animation: spin 1s linear infinite;
-    box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
-  }
-  
-  @keyframes spin {
-    0% {
-      transform: rotate(0deg);
+}
+
+.spinner::after {
+    top: 15px; left: 15px; right: 15px; bottom: 15px;
+    border: 4px dashed #fff6;
+    animation: spin-reverse 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg);}
+    100% { transform: rotate(360deg);}
+}
+
+@keyframes spin-reverse {
+    0% { transform: rotate(0deg);}
+    100% { transform: rotate(-360deg);}
+}
+
+@keyframes spinner-glow {
+    0%, 100% {
+        box-shadow:
+            0 0 40px 10px #00ffffa0,
+            0 0 80px 20px #7f00ffaa,
+            0 0 0 0 #fff;
+        filter: brightness(1.1);
     }
-    100% {
-      transform: rotate(360deg);
+    50% {
+        box-shadow:
+            0 0 80px 30px #00ffffe0,
+            0 0 120px 40px #7f00ffdd,
+            0 0 20px 10px #fff;
+        filter: brightness(1.6);
     }
-  }
-  
+}
+
+.loadingText {
+    margin-top: 32px;
+    font-size: 2.2rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: #fff;
+    text-shadow: 0 0 20px #7f00ff, 0 0 8px #00ffff;
+    animation: text-fade 2.5s ease-in-out infinite;
+}
+
+@keyframes text-fade {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; transform: scale(1.07);}
+}

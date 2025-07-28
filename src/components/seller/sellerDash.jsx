@@ -1,3 +1,7 @@
+// lets sellers view and manage their store profile and products
+// TODO: split this giant component into smaller self-contained pieces
+// TIP: consider using custom hooks for Firebase listeners
+
 import React, { useState, useEffect } from "react";
 import { getDatabase, ref, onValue, update, remove, query, orderByChild } from "firebase/database";
 import { useAuth } from "../../contexts/AuthContext";
@@ -14,15 +18,18 @@ export default function SellerDashboard() {
   const [editStates, setEditStates] = useState({});
 
 
+   // load seller profile once
   useEffect(() => {
-    if (!currentUser) return;
+    if (!currentUser) return
     const db = getDatabase();
-    const sellerRef = ref(db, `users/${currentUser.uid}/seller/profile`);
+
+    const sellerRef = ref(db, `users/${currentUser.uid}/seller/profile`)
     const unsubscribe = onValue(sellerRef, (snap) => {
-      setProfile(snap.val());
+    setProfile(snap.val());
       setProfileLoading(false);
-    });
-    return () => unsubscribe();
+    }
+  );
+    return ( ) => unsubscribe();
   }, [currentUser]);
 
   useEffect(() => {
