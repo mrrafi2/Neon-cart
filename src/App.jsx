@@ -9,6 +9,7 @@ import LoadingSpinner from "./components/common/loading";
 import { fetchProducts } from "./data/fetchProductData";
 import { BrowserRouter } from "react-router-dom";
 import MainRouter  from "./router";
+import ScrollToTop from "./components/common/scrollToTop";
 
 function App() {
   const [showIntro, setShowIntro] = useState(true);
@@ -32,6 +33,7 @@ function App() {
         <BrowserRouter>
         <AuthProvider>
           <CartProvider>
+            <ScrollToTop/>
             <MainRouter />
           </CartProvider>
         </AuthProvider>

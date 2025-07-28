@@ -4,7 +4,7 @@
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000;
+  z-index: 1500;
   background: linear-gradient(135deg, rgba(10, 10, 11, 0.95), rgba(30, 30, 40, 0.95));
   backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(0, 255, 255, 0.2);

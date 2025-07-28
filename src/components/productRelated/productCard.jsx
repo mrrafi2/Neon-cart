@@ -215,7 +215,7 @@ useEffect(( ) => {
           </button>
         </div>
 
-// TODO: pull real description from backend in future?
+{/* TODO: pull real description from backend in future? */}
         <div className={`${styles.expandedContent} ${expanded ? styles.expandedVisible : ""}`}>
           <div className={styles.expandedDetails}>
             <p className={styles.expandedText}>Click the card to get more details about this product...</p>
