@@ -227,6 +227,8 @@ const handlePageChange = (page) => {
         <button
           className={styles.sortToggle}
           onClick={() => setDropdownOpen(o => !o)}
+          aria-expanded={dropdownOpen}
+          aria-label="Sort products"
         >
           Sort: {(() => {
             const map = {
@@ -240,6 +242,7 @@ const handlePageChange = (page) => {
           })()}
           <span className={styles.arrow}>{dropdownOpen ? "▲" : "▼"}</span>
         </button>
+        
         {dropdownOpen && (
           <ul className={styles.sortMenu}>
             {[
@@ -281,7 +284,6 @@ const handlePageChange = (page) => {
             <ProductGrid products={paginatedProducts} />
           ) : (
             <div className={styles.emptyState}>
-              {/* Empty state animation */}
               <div className={styles.emptyAnimation}>
                 <div className={styles.emptyBox}></div>
                 <div className={styles.emptyPulse}></div>
@@ -299,12 +301,12 @@ const handlePageChange = (page) => {
           )}
         </div>
 
-        {/* Pagination */}
+        {/* pagination */}
         {totalPages > 1 && (
           <div className={styles.paginationContainer}>
             <nav className={styles.pagination} aria-label="Pagination">
 
-                {/* Previous Button */}
+                {/* previous Button */}
               <button
                onClick={() => handlePageChange(validPage - 1)}
                disabled={validPage === 1}
@@ -316,7 +318,7 @@ const handlePageChange = (page) => {
                ← Prev
              </button>
 
-              {/* Page Numbers */}
+              {/* page Numbers */}
               <div className={styles.pageNumber}>
                 {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => {
                   let pageNumber;
@@ -349,7 +351,7 @@ const handlePageChange = (page) => {
                 })}
               </div>
 
-              {/* Next Button */}
+              {/* next Button */}
               <button
                 onClick={() => handlePageChange(validPage + 1)}
                 disabled={validPage === totalPages}
@@ -363,9 +365,8 @@ const handlePageChange = (page) => {
         )}
       </div>
 
-      {/* Background decorative elements */}
+{/* background decorations */}
       <div className={styles.backgroundOrbs}>
-        {/* Floating orbs */}
         {Array.from({ length: 5 }, (_, i) => (
           <div
             key={i}

@@ -946,7 +946,6 @@
   }
 }
 
-/* Responsive Design */
 @media (max-width: 1024px) {
   .productLayout {
     grid-template-columns: 1fr;
@@ -1006,6 +1005,19 @@
   .detailGrid {
     grid-template-columns: 1fr;
   }
+
+  .specValue {
+  font-weight: 600;
+  color: #ffffff;
+  margin-left: 18px;
+}
+
+.cartButton {
+  position: relative;
+  padding: 13px 25px;
+  margin-left: 20px;
+  font-size: 17px;
+}
 }
 
 @media (max-width: 480px) {
@@ -1055,7 +1067,6 @@
   }
 }
 
-/* High contrast mode support */
 @media (prefers-contrast: high) {
   .detailContainer {
     background: #000000;

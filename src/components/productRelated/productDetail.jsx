@@ -298,17 +298,30 @@ export default function ProductDetail() {
 
           {product.dynamicValues && Object.keys(product.dynamicValues).length > 0 && (
             <div className={styles.specificationsSection}>
-              <h3 className={styles.sectionTitle}>Specifications</h3>
+              <h3 className={styles.sectionTitle}>
+                Specifications
+                </h3>
+
               <div className={styles.specGrid}>
+
                 {Object.entries(product.dynamicValues).map(([key, value]) => (
                   <div key={key} className={styles.specItem}>
-                    <span className={styles.specLabel}>{key}</span>
-                    <span className={styles.specValue}>{value}</span>
+
+                    <span className={styles.specLabel}>
+                      {key}
+                      </span>
+
+                    <span className={styles.specValue}>
+                      {value}
+                      </span>
                   </div>
-                ))}
+                ) )
+                }
               </div>
             </div>
           )}
+         
+         <br /> 
 
           {product.description && (
             <div className={styles.descriptionSection}>
