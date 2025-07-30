@@ -31,6 +31,7 @@ export default function Login() {
     }
   }
 
+  //google login handler
   async function handleGoogleLogin() {
     setError("");
     setLoading(true);
