@@ -7,6 +7,7 @@ import { FaShoppingCart, FaInfoCircle, FaStar, FaStarHalfAlt } from "react-icons
 import { getDatabase, ref, onValue } from "firebase/database";
 import styles from "../style/productCard.module.css";
 import { useCartDispatch, addItem } from "../../contexts/CartContext"
+import {useCartAnimation} from "../../contexts/cartAnimationContext"
 
 export default function ProductCard ( { product = { }, onProductSelect } ) {
 
@@ -20,6 +21,7 @@ export default function ProductCard ( { product = { }, onProductSelect } ) {
   const [isHovered, setIsHovered] = useState(false);
   const cardRef = useRef(null);
   const dispatch = useCartDispatch();
+  const { trigger } = useCartAnimation();
 
   const {
     id,
@@ -89,7 +91,8 @@ useEffect(( ) => {
 
       return <FaStar key={i} className={styles.starEmpty} size={14} />
     }
-  });
+  }
+);
 
   // TODO:should we debounce this? Fast clickers beware.
   const handleCardClick = ( ) => {
@@ -108,11 +111,13 @@ useEffect(( ) => {
   const handleCartClick = (e) => {
     e.stopPropagation()
     dispatch(addItem({ id, title, price: Number(price), imageUrl } ) )
+     trigger({ imageUrl, id });
+
   };
 
   return (
 
-    // NOTE: for animations css doing heavy lifting , keep JS light.
+    // Note: for animations css doing heavy lifting , keep JS light.
     <article
       ref={cardRef}
       className={`${styles.card} ${visible ? styles.visible : ""} ${expanded ? styles.expanded : ""}`}

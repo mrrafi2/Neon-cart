@@ -1,0 +1,380 @@
+.animationContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 9999;
+}
+
+.thumb {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 2px solid #00fff7;
+  box-shadow: 
+    0 0 20px rgba(0, 255, 247, 0.8),
+    0 0 40px rgba(0, 255, 247, 0.4),
+    inset 0 0 10px rgba(255, 255, 255, 0.2);
+  transform-origin: center center;
+  filter: brightness(1.1) contrast(1.2);
+}
+
+.cartContainer {
+  position: absolute;
+  width: 120px;
+  height: 80px;
+  transform-origin: center center;
+}
+
+.cart {
+  position: relative;
+  width: 80px;
+  height: 50px;
+  background: linear-gradient(135deg, 
+    #1a1a1a 0%, 
+    #2d2d2d 25%, 
+    #404040 50%, 
+    #2d2d2d 75%, 
+    #1a1a1a 100%
+  );
+  border: 2px solid #00fff7;
+  border-radius: 8px 8px 4px 4px;
+  box-shadow: 
+    0 0 25px rgba(0, 255, 247, 0.8),
+    0 0 50px rgba(0, 255, 247, 0.4),
+    inset 0 2px 10px rgba(0, 255, 247, 0.3),
+    inset 0 -2px 10px rgba(255, 0, 225, 0.2);
+  transform-origin: center center;
+  overflow: visible;
+}
+
+.cart::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 10px;
+  right: 10px;
+  height: 8px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    #00fff7 20%, 
+    #ff00e1 50%, 
+    #ffe600 80%, 
+    transparent 100%
+  );
+  border-radius: 4px 4px 0 0;
+  box-shadow: 0 0 15px rgba(0, 255, 247, 0.6);
+}
+
+.cart::after {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 255, 247, 0.2) 0%,
+    rgba(255, 0, 225, 0.1) 50%,
+    transparent 100%
+  );
+  border-radius: 4px;
+  animation: cartInnerGlow 2s infinite ease-in-out;
+}
+
+@keyframes cartInnerGlow {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.wheel {
+  position: absolute;
+  bottom: -12px;
+  width: 20px;
+  height: 20px;
+  background: radial-gradient(
+    circle,
+    #ffe600 0%,
+    #ff00e1 30%,
+    #00fff7 60%,
+    #1a1a1a 100%
+  );
+  border: 2px solid #00fff7;
+  border-radius: 50%;
+  box-shadow: 
+    0 0 20px rgba(0, 255, 247, 0.8),
+    inset 0 0 10px rgba(255, 230, 0, 0.5);
+  transform-origin: center center;
+}
+
+.wheel:first-child {
+  left: 8px;
+}
+
+.wheel:last-child {
+  right: 8px;
+}
+
+.wheel::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  background: #ffe600;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 10px #ffe600;
+}
+
+.sparks {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.spark {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: radial-gradient(circle, #ffe600 0%, #ff00e1 100%);
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(0.5);
+  box-shadow: 0 0 10px #ffe600;
+}
+
+.spark:nth-child(1) {
+  top: 10px;
+  left: 20px;
+  animation: sparkFloat1 1.5s infinite ease-in-out;
+}
+
+.spark:nth-child(2) {
+  top: 25px;
+  right: 15px;
+  animation: sparkFloat2 1.8s infinite ease-in-out;
+  animation-delay: 0.3s;
+}
+
+.spark:nth-child(3) {
+  bottom: 20px;
+  left: 30px;
+  animation: sparkFloat3 1.2s infinite ease-in-out;
+  animation-delay: 0.6s;
+}
+
+.spark:nth-child(4) {
+  top: 5px;
+  left: 50px;
+  animation: sparkFloat1 1.6s infinite ease-in-out;
+  animation-delay: 0.9s;
+}
+
+.spark:nth-child(5) {
+  bottom: 30px;
+  right: 25px;
+  animation: sparkFloat2 1.4s infinite ease-in-out;
+  animation-delay: 1.2s;
+}
+
+.spark:nth-child(6) {
+  top: 35px;
+  left: 10px;
+  animation: sparkFloat3 1.7s infinite ease-in-out;
+  animation-delay: 1.5s;
+}
+
+@keyframes sparkFloat1 {
+  0%, 100% { 
+    transform: translateY(0) scale(0.5);
+    opacity: 0;
+  }
+  50% { 
+    transform: translateY(-10px) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes sparkFloat2 {
+  0%, 100% { 
+    transform: translateX(0) scale(0.5);
+    opacity: 0;
+  }
+  50% { 
+    transform: translateX(8px) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes sparkFloat3 {
+  0%, 100% { 
+    transform: translate(0, 0) scale(0.5);
+    opacity: 0;
+  }
+  50% { 
+    transform: translate(5px, -5px) scale(1);
+    opacity: 1;
+  }
+}
+
+.neonBag {
+  position: absolute;
+  top: -10px;
+  left: -20px;
+  width: 120px;
+  height: 80px;
+  background: linear-gradient(135deg,
+    rgba(0, 255, 128, 0.1) 0%,
+    rgba(0, 255, 247, 0.2) 50%,
+    rgba(255, 0, 225, 0.1) 100%
+  );
+  border: 2px solid rgba(0, 255, 128, 0.6);
+  border-radius: 15px;
+  backdrop-filter: blur(2px);
+  transform-origin: center center;
+  opacity: 0;
+  scale: 0;
+}
+
+.neonBag::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  width: 30px;
+  height: 10px;
+  background: linear-gradient(90deg,
+    #00ff80 0%,
+    #00fff7 50%,
+    #00ff80 100%
+  );
+  border-radius: 5px 5px 0 0;
+  transform: translateX(-50%);
+  box-shadow: 0 0 15px rgba(0, 255, 128, 0.8);
+}
+
+.neonBag::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 24px;
+  font-weight: bold;
+  color: #00ff80;
+  text-shadow: 0 0 20px #00ff80;
+  animation: checkmarkPulse 1s infinite ease-in-out;
+}
+
+@keyframes checkmarkPulse {
+  0%, 100% { 
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.8;
+  }
+  50% { 
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 1;
+  }
+}
+
+.bagGlow {
+  position: absolute;
+  inset: -10px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 255, 128, 0.3) 0%,
+    rgba(0, 255, 247, 0.2) 50%,
+    transparent 100%
+  );
+  border-radius: 25px;
+  opacity: 0;
+  transform: scale(0.8);
+  animation: bagGlowPulse 2s infinite ease-in-out;
+}
+
+@keyframes bagGlowPulse {
+  0%, 100% { 
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  50% { 
+    opacity: 0.8;
+    transform: scale(1.2);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .thumb {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .cartContainer {
+    width: 100px;
+    height: 70px;
+  }
+  
+  .cart {
+    width: 70px;
+    height: 45px;
+  }
+  
+  .wheel {
+    width: 16px;
+    height: 16px;
+    bottom: -10px;
+  }
+  
+  .neonBag {
+    width: 100px;
+    height: 70px;
+    top: -8px;
+    left: -15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .thumb {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .cartContainer {
+    width: 80px;
+    height: 60px;
+  }
+  
+  .cart {
+    width: 60px;
+    height: 40px;
+  }
+  
+  .wheel {
+    width: 14px;
+    height: 14px;
+    bottom: -8px;
+  }
+  
+  .neonBag {
+    width: 80px;
+    height: 60px;
+    top: -6px;
+    left: -10px;
+  }
+  
+  .neonBag::after {
+    font-size: 18px;
+  }
+}

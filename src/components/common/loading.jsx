@@ -7,9 +7,7 @@ export default function LoadingSpinner() {
   return (
     <div className={styles.spinnerContainer}>
       <div className={styles.spinner}></div>
-      <div className={styles.loadingText}>
-        Waiting for Magnificence...
-      </div>
+      
     </div>
   );
 }

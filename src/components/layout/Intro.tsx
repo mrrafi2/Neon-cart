@@ -1,32 +1,31 @@
-// the only tsx component for designing a cool intro
-
 import React, { useRef, useEffect } from "react";
 import { gsap } from "gsap";
+import styles from "../style/IntroAnimation.module.css"
 
-const SHAPES = [
-  { type: "cube", color: "#00fff7" },
-  { type: "sphere", color: "#ff00e1" },
-  { type: "pyramid", color: "#ffe600" },
-  { type: "hexagon", color: "#00ff80" },
+const PARTICLES = Array.from({ length: 12 }, (_, i) => ({
+  id: i,
+  delay: i * 0.08,
+  angle: (i * 30) % 360,
+}));
+
+const CIRCUIT_NODES = [
+  { x: 20, y: 30, size: 8 },
+  { x: 80, y: 25, size: 12 },
+  { x: 35, y: 70, size: 10 },
+  { x: 65, y: 75, size: 14 },
+  { x: 50, y: 50, size: 16 },
 ];
-
-const neonGradient = [
-  "linear-gradient(90deg, #00fff7 0%, #ff00e1 50%, #ffe600 100%)",
-  "linear-gradient(90deg, #00ff80 0%, #ffe600 50%, #00fff7 100%)",
-];
-
-const easeExpo = "expo.inOut";
-const easeBack = "back.out(1.7)";
 
 export function IntroAnimation({ onComplete }: { onComplete?: () => void }) {
   const container = useRef<HTMLDivElement>(null);
   const blackout = useRef<HTMLDivElement>(null);
-  const spark = useRef<HTMLDivElement>(null);
-  const camera = useRef<HTMLDivElement>(null);
-  const shapes = useRef<(HTMLDivElement | null)[]>([]);
+  const gridOverlay = useRef<HTMLDivElement>(null);
+  const particleContainer = useRef<HTMLDivElement>(null);
   const logo = useRef<HTMLDivElement>(null);
-  const tagline = useRef<HTMLDivElement>(null);
-  const flare = useRef<HTMLDivElement>(null);
+  const subtitle = useRef<HTMLDivElement>(null);
+  const circuitBoard = useRef<HTMLDivElement>(null);
+  const hologram = useRef<HTMLDivElement>(null);
+  const electricArc = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const tl = gsap.timeline({
@@ -34,316 +33,188 @@ export function IntroAnimation({ onComplete }: { onComplete?: () => void }) {
       onComplete,
     });
 
-    // --- 0.0–0.5s “Blackout & Spark” ---
+    // Initial setup
     tl.set(container.current, { opacity: 1 });
-    tl.set([spark.current, camera.current, ...shapes.current, logo.current, tagline.current, flare.current], { opacity: 0 });
+    tl.set([gridOverlay.current, logo.current, subtitle.current, circuitBoard.current, hologram.current, electricArc.current], { opacity: 0 });
     tl.set(blackout.current, { opacity: 1 });
 
-    tl.to(blackout.current, { opacity: 0, duration: 0.05, delay: 0.15 }); // 3 frames blackout (~0.05s at 60fps)
-    tl.to(spark.current, {
-      opacity: 1,
-      scale: 1.7,
-      filter: "brightness(2)",
-      duration: 0.05,
-      ease: "power2.in",
-    }, 0.18)
-      .to(spark.current, { opacity: 0, scale: 0.9, filter: "none", duration: 0.08 }, "+=0.03");
-
-    // --- 0.5–1.5s “Wormhole Camera” ---
-    tl.to(camera.current, {
-      opacity: 1,
-      scale: 2.5,
-      x: 80,
-      y: -50,
-      filter: "blur(10px)",
-      duration: 0.01,
-      ease: easeExpo,
-    }, 0.5)
-      .to(camera.current, {
+    // 0.0-0.3s: Blackout flash & grid emergence
+    tl.to(blackout.current, { opacity: 0, duration: 0.1, ease: "power2.inOut" })
+      .to(gridOverlay.current, { 
+        opacity: 1, 
         scale: 1,
-        x: 0,
-        y: 0,
-        filter: "blur(0px)",
-        duration: 1.0,
-        ease: easeExpo,
-      }, "<");
+        duration: 0.2, 
+        ease: "power3.out" 
+      }, 0.1);
 
-    // --- 1.5–2.5s “Neon Shapes Explode” ---
-    SHAPES.forEach((shape, i) => {
-      tl.to(shapes.current[i], {
-        opacity: 1,
-        scale: 1,
-        x: i * 70 - 105, // spread out
-        y: [-15, 10, -10, 20][i],
-        filter: "drop-shadow(0 0 12px " + shape.color + ")",
-        duration: 0.45,
-        ease: easeBack,
-      }, 1.5 + i * 0.2)
-      .to(shapes.current[i], {
-        filter: "drop-shadow(0 0 24px " + shape.color + ")",
-        duration: 0.12,
-        yoyo: true,
-        repeat: 1,
-        ease: "power2.inOut",
-      }, "+=0.18");
+    // 0.3-0.8s: Circuit board activation
+    tl.to(circuitBoard.current, {
+      opacity: 1,
+      scale: 1,
+      rotationZ: 360,
+      duration: 0.5,
+      ease: "back.out(1.7)"
+    }, 0.3);
+
+    // 0.8-1.3s: Particle explosion
+    PARTICLES.forEach((particle, i) => {
+      const particleEl = particleContainer.current?.children[i] as HTMLElement;
+      if (particleEl) {
+        tl.to(particleEl, {
+          opacity: 1,
+          scale: 1.5,
+          x: Math.cos(particle.angle * Math.PI / 180) * 150,
+          y: Math.sin(particle.angle * Math.PI / 180) * 150,
+          duration: 0.4,
+          ease: "power2.out"
+        }, 0.8 + particle.delay)
+        .to(particleEl, {
+          opacity: 0,
+          scale: 0.5,
+          duration: 0.1
+        }, "+=0.1");
+      }
     });
 
-    // --- 2.5–3.5s “Logo Emerges” ---
-    tl.to(logo.current, {
+    // 1.3-1.8s: Electric arc & hologram
+    tl.to(electricArc.current, {
       opacity: 1,
-      scale: 0.4,
-      rotateY: 70,
-      duration: 0.01,
-      ease: "none",
-    }, 2.5)
-      .to(logo.current, {
-        scale: 1,
-        rotateY: 0,
-        duration: 0.8,
-        ease: easeExpo,
-      }, "<")
-      .to(logo.current, {
-        background: neonGradient[1],
-        duration: 0.09,
-        repeat: 3,
-        yoyo: true,
-        ease: "power1.inOut",
-      }, "<+0.1");
+      scaleX: 1,
+      duration: 0.2,
+      ease: "power3.inOut"
+    }, 1.3)
+    .to(hologram.current, {
+      opacity: 0.8,
+      scale: 1.2,
+      duration: 0.3,
+      ease: "elastic.out(1, 0.5)"
+    }, 1.4);
 
-    tl.to(flare.current, {
+    // 1.8-2.3s: Logo dramatic entrance
+    tl.fromTo(logo.current, {
+      scale: 0.3,
+      rotationY: 180,
+      z: -200,
+      opacity: 0
+    }, {
       opacity: 1,
-      scale: 1.5,
+      scale: 1,
+      rotationY: 0,
+      z: 0,
       duration: 0.6,
-      ease: "power2.out",
-    }, 3.5)
-      .to(flare.current, { opacity: 0, duration: 0.2 }, "+=0.7");
+      ease: "back.out(2.5)",
+      onStart: () => {
+        // Add dramatic camera shake
+        gsap.to(container.current, {
+          x: 2,
+          duration: 0.05,
+          yoyo: true,
+          repeat: 5,
+          ease: "power2.inOut"
+        });
+      }
+    }, 1.8);
 
-   
-tl.set(tagline.current, { opacity: 1 }, 3.7);
+    // Add "ADDED TO CART" success message
+    tl.to(subtitle.current, {
+      innerHTML: "ITEM SECURED • QUANTUM ENCRYPTED",
+      color: "#00ff80",
+      duration: 0.1
+    }, 2.0);
 
-const tagSpans = tagline.current?.children || [];
+    // 2.3-2.6s: Enhanced subtitle effect
+    tl.to(subtitle.current, {
+      opacity: 1,
+      y: 0,
+      scale: 1.05,
+      duration: 0.4,
+      ease: "elastic.out(1, 0.5)"
+    }, 2.3);
 
-Array.from(tagSpans).forEach((spanEl, i) => {
-  tl.from(
-    spanEl,
-    { y: -40, opacity: 0, duration: 0.22, ease: "power3.out" },
-    3.7 + i * 0.04
-  );
-});
+    // Add shopping confirmation pulse
+    tl.to([logo.current, circuitBoard.current], {
+      filter: "brightness(1.3) saturate(1.2)",
+      duration: 0.2,
+      yoyo: true,
+      repeat: 1,
+      ease: "power2.inOut"
+    }, 2.4);
 
-
-    // --- 4.5–5.0s “Pulse & Fade” ---
-    tl.to([logo.current, ...shapes.current], {
+    // 2.6-2.8s: Enhanced final sequence
+    tl.to([logo.current, circuitBoard.current], {
       scale: 1.1,
-      duration: 0.18,
-      ease: "power2.in",
-    }, 4.5)
-      .to([logo.current, ...shapes.current], {
-        scale: 1,
-        duration: 0.07,
-        ease: "power2.out",
-      }, "+=0.16");
-    tl.to(container.current, { opacity: 0, duration: 0.3, ease: "power2.in" }, 4.7);
+      duration: 0.15,
+      ease: "power2.inOut"
+    }, 2.6)
+    .to([logo.current, circuitBoard.current], {
+      scale: 1,
+      duration: 0.15,
+      ease: "elastic.out(1, 0.3)"
+    }, "+=0.05")
+    .to(subtitle.current, {
+      innerHTML: "WELCOME TO NEONCART",
+      color: "#00fff7",
+      scale: 1,
+      duration: 0.1
+    }, 2.65)
+    .to(container.current, {
+      opacity: 0,
+      duration: 0.15,
+      ease: "power2.in"
+    }, 2.7);
 
-    // Optionally play sound at logo reveal
-    // const logoSound = new Audio("/sounds/zap.mp3");
-    // logoSound.play();
-
-    // eslint-disable-next-line
-  }, []);
+  }, [onComplete]);
 
   return (
-    <div
-      ref={container}
-      style={{
-        position: "fixed",
-        inset: 0,
-        width: "100vw",
-        height: "100vh",
-        background: "#111",
-        zIndex: 9999,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        pointerEvents: "none",
-        overflow: "hidden",
-      }}
-    >
-      {/* Blackout Layer */}
-      <div
-        ref={blackout}
-        style={{
-          position: "absolute",
-          inset: 0,
-          background: "#000",
-          zIndex: 3,
-          opacity: 1,
-        }}
-      />
-      {/* Spark */}
-      <div
-        ref={spark}
-        style={{
-          position: "absolute",
-          left: "50%",
-          top: "50%",
-          width: 60,
-          height: 60,
-          borderRadius: "50%",
-          background: "radial-gradient(circle, #fff 0%, #00fff7 60%, transparent 100%)",
-          transform: "translate(-50%, -50%)",
-          opacity: 0,
-          zIndex: 4,
-        }}
-      />
+    <div ref={container} className={styles.container}>
+      {/* Blackout */}
+      <div ref={blackout} className={styles.blackout} />
+      
+      {/* Animated Grid Overlay */}
+      <div ref={gridOverlay} className={styles.gridOverlay}>
+        <div className={styles.gridLines} />
+      </div>
 
-      {/* Camera Layer */}
-      <div
-        ref={camera}
-        style={{
-          position: "absolute",
-          left: "50%",
-          top: "50%",
-          width: 420,
-          height: 220,
-          background: "rgba(17, 17, 17, 0.41)",
-          borderRadius: "24px",
-          boxShadow: "0 0 60px #00fff7, 0 0 120px #ff00e1",
-          transform: "translate(-50%, -50%) scale(2.5)",
-          opacity: 0,
-          zIndex: 2,
-          overflow: "visible",
-        }}
-      >
-        {/* Neon Shapes */}
-        {SHAPES.map((shape, i) => (
+      {/* Circuit Board */}
+      <div ref={circuitBoard} className={styles.circuitBoard}>
+        {CIRCUIT_NODES.map((node, i) => (
           <div
-            key={shape.type}
-            ref={el => (shapes.current[i] = el)}
+            key={i}
+            className={styles.circuitNode}
             style={{
-              position: "absolute",
-              top: 90 + i * 10,
-              left: 60 + i * 80,
-              width: 48,
-              height: 48,
-              opacity: 0,
-              transform: "scale(0.6)",
-              filter: `drop-shadow(0 0 0px ${shape.color})`,
-              zIndex: 7,
-              ...getShapeStyle(shape.type, shape.color),
+              left: `${node.x}%`,
+              top: `${node.y}%`,
+              width: `${node.size}px`,
+              height: `${node.size}px`,
             }}
           />
         ))}
+        <div className={styles.circuitLines} />
       </div>
+
+      {/* Particle Container */}
+      <div ref={particleContainer} className={styles.particleContainer}>
+        {PARTICLES.map((particle) => (
+          <div key={particle.id} className={styles.particle} />
+        ))}
+      </div>
+
+      {/* Electric Arc */}
+      <div ref={electricArc} className={styles.electricArc} />
+
+      {/* Hologram Effect */}
+      <div ref={hologram} className={styles.hologram} />
 
       {/* Logo */}
-      <div
-        ref={logo}
-        style={{
-          position: "absolute",
-          left: "50%",
-          top: "50%",
-          transform: "translate(-50%, -50%) scale(0.4) rotateY(70deg)",
-          fontSize: 56,
-          fontWeight: 900,
-          letterSpacing: 1.4,
-          color: "#fff",
-          background: neonGradient[0],
-          WebkitBackgroundClip: "text",
-          WebkitTextFillColor: "transparent",
-          textShadow: "0 0 32px #00fff7, 0 0 10px #ff00e1",
-          opacity: 0,
-          zIndex: 8,
-        }}
-      >
-        NeonCart
+      <div ref={logo} className={styles.logo}>
+        <span className={styles.logoText}>NEONCART</span>
+        <div className={styles.logoGlow} />
       </div>
 
-      {/* Lens Flare */}
-      <div
-        ref={flare}
-        style={{
-          position: "absolute",
-          left: "50%",
-          top: "60%",
-          width: 340,
-          height: 120,
-          transform: "translate(-50%, -50%) scale(1.2)",
-          borderRadius: "50%",
-          background: "radial-gradient(ellipse at center, #fff 0%, #ffe600 65%, transparent 100%)",
-          opacity: 0,
-          zIndex: 18,
-          pointerEvents: "none",
-        }}
-      />
-
-      {/* Tagline */}
-      <div
-        ref={tagline}
-        style={{
-          position: "absolute",
-          left: "50%",
-          top: "68%",
-          transform: "translate(-50%, -50%)",
-          fontSize: 26,
-          fontWeight: 500,
-          color: "#fff",
-          letterSpacing: 1.1,
-          opacity: 0,
-          zIndex: 10,
-          display: "flex",
-        }}
-      >
-        {"Your Marketplace, Electrified".split("").map((char, i) => (
-          <span
-            key={i}
-            style={{
-              display: "inline-block",
-              marginRight: char === " " ? 8 : 0,
-              opacity: 1,
-            }}
-          >
-            {char}
-          </span>
-        ))}
+      {/* Subtitle */}
+      <div ref={subtitle} className={styles.subtitle}>
+        NEON MARKETPLACE ACTIVATED
       </div>
     </div>
   );
-}
-
-// Helper: returns CSS for shapes
-function getShapeStyle(type: string, color: string) {
-  switch (type) {
-    case "cube":
-      return {
-        background: color,
-        boxShadow: "0 0 20px " + color,
-        borderRadius: "8px",
-      };
-    case "sphere":
-      return {
-        background: `radial-gradient(circle, ${color} 60%, #111 100%)`,
-        borderRadius: "50%",
-        boxShadow: "0 0 20px " + color,
-      };
-    case "pyramid":
-      return {
-        width: 0,
-        height: 0,
-        borderLeft: "24px solid transparent",
-        borderRight: "24px solid transparent",
-        borderBottom: `48px solid ${color}`,
-        background: "none",
-        boxShadow: "0 0 20px " + color,
-        borderRadius: 0,
-      };
-    case "hexagon":
-      return {
-        clipPath: "polygon(25% 6.7%, 75% 6.7%, 100% 50%, 75% 93.3%, 25% 93.3%, 0% 50%)",
-        background: color,
-        boxShadow: "0 0 20px " + color,
-      };
-    default:
-      return {};
-  }
 }

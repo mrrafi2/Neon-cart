@@ -1,3 +1,83 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Custom Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 100%);
+  border-radius: 6px;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, 
+    #00fff7 0%, 
+    #ff00e1 50%, 
+    #ffe600 100%
+  );
+  border-radius: 6px;
+  border: 1px solid rgba(0, 255, 247, 0.3);
+  box-shadow: 
+    0 0 10px rgba(0, 255, 247, 0.5),
+    inset 0 0 5px rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, 
+    #00fff7 0%, 
+    #ffe600 50%, 
+    #ff00e1 100%
+  );
+  box-shadow: 
+    0 0 15px rgba(0, 255, 247, 0.8),
+    0 0 25px rgba(255, 0, 225, 0.4),
+    inset 0 0 8px rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(180deg, 
+    #ffe600 0%, 
+    #00fff7 50%, 
+    #ff00e1 100%
+  );
+  box-shadow: 
+    0 0 20px rgba(255, 230, 0, 0.9),
+    0 0 30px rgba(0, 255, 247, 0.6),
+    inset 0 0 10px rgba(255, 255, 255, 0.4);
+}
+
+::-webkit-scrollbar-corner {
+  background: #0a0a0a;
+}
+
+/* Firefox Scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #00fff7 #1a1a1a;
+}
+
+/* Scrollbar for specific containers */
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(45deg, 
+    rgba(0, 255, 247, 0.8) 0%, 
+    rgba(255, 0, 225, 0.8) 100%
+  );
+  border-radius: 8px;
+  animation: scrollbarPulse 2s infinite ease-in-out;
+}
+
+@keyframes scrollbarPulse {
+  0%, 100% { 
+    box-shadow: 0 0 10px rgba(0, 255, 247, 0.5);
+  }
+  50% { 
+    box-shadow: 0 0 20px rgba(0, 255, 247, 0.8), 0 0 30px rgba(255, 0, 225, 0.4);
+  }
+}

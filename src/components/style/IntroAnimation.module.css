@@ -183,6 +183,7 @@
   animation: logoShimmer 1.5s infinite ease-in-out;
   text-shadow: 0 0 30px rgba(0, 255, 247, 0.8);
   position: relative;
+  right: -20px;
 }
 
 @keyframes logoShimmer {
