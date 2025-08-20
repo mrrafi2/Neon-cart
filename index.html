@@ -2,17 +2,13 @@
 <html lang="en">
   <head>
 
-    <style>
-    html, body, #root {
-      background: linear-gradient(135deg, #141e30, #243b55);
-    }
-  </style>
+    
 
     <!-- Primary Meta Tags -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="Neon‑Cart: your ultimate neon‑themed e‑commerce platform— eye catching, fast, accessible, and blazing with style." />
-    <meta name="theme-color" content="#0f0f0f" />
+  <meta name="theme-color" content="#141e30" />
 
     <!-- SEO & Crawling -->
     <meta name="robots" content="index, follow" />
@@ -64,7 +60,24 @@
       referrerpolicy="no-referrer"
     />
 
-    <title>Neon‑Cart</title>
+    <title>Neon‑Cart</title>,
+
+    <style>
+    html, body, #root, #cart-root {
+      height: 100%;
+      margin: 0;
+      background: linear-gradient(135deg, #141e30, #243b55);
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* fallback solid color for very old browsers */
+    body { background-color: #141e30; }
+
+    :root { color-scheme: dark; }
+  </style>
     
   </head>
   <body>
